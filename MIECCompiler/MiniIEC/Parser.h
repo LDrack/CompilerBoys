@@ -26,7 +26,9 @@ public:
 class Parser {
 private:
 	enum {
-		_EOF=0
+		_EOF=0,
+		_ident=1,
+		_number=2
 	};
 	int maxT;
 
@@ -48,6 +50,42 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
+int // operators
+	  plus, minus, times, slash, equ, lss, gtr;
+
+	int // types
+	  integer;
+
+	int // object kinds
+	  var, proc;
+
+	int // opcodes
+	  ADD,  SUB,   MUL,   DIV,   EQU,  LSS, GTR, NEG,
+	  LOAD, LOADG, STO,   STOG,  CONST,
+	  CALL, RET,   ENTER, LEAVE,
+	  JMP,  FJMP,  READ,  WRITE; 
+	
+	/*
+	SymbolTable   *tab;
+	CodeGenerator *gen;
+	*/
+
+	void Err(wchar_t* msg) {
+		errors->Error(la->line, la->col, msg);
+	}
+
+	void InitDeclarations() { // it must exist
+		plus = 0; minus = 1; times = 2; slash = 3; equ = 4; lss = 5; gtr = 6; // operators
+		integer = 0; // types
+		var = 0; proc = 1; // object kinds
+
+		// opcodes
+		ADD  =  0; SUB   =  1; MUL   =  2; DIV   =  3; EQU   =  4; LSS = 5; GTR = 6; NEG = 7;
+		LOAD =  8; LOADG =  9; STO   = 10; STOG  = 11; CONST = 12;
+		CALL = 13; RET   = 14; ENTER = 15; LEAVE = 16;
+		JMP  = 17; FJMP  = 18; READ  = 19; WRITE = 20;
+	}
+  
 
 
 	Parser(Scanner *scanner);
@@ -55,6 +93,14 @@ public:
 	void SemErr(const wchar_t* msg);
 
 	void MIEC();
+	void VarDecl();
+	void Statements();
+	void Stat();
+	void Expr();
+	void Condition();
+	void Term();
+	void Fact();
+	void Relop();
 
 	void Parse();
 

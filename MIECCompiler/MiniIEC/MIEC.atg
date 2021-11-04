@@ -18,8 +18,10 @@ COMPILER MIEC
 	  CALL, RET,   ENTER, LEAVE,
 	  JMP,  FJMP,  READ,  WRITE; 
 	
+	/*
 	SymbolTable   *tab;
 	CodeGenerator *gen;
+	*/
 
 	void Err(wchar_t* msg) {
 		errors->Error(la->line, la->col, msg);
@@ -27,7 +29,7 @@ COMPILER MIEC
 
 	void InitDeclarations() { // it must exist
 		plus = 0; minus = 1; times = 2; slash = 3; equ = 4; lss = 5; gtr = 6; // operators
-		undef = 0; integer = 1; boolean = 2; // types
+		integer = 0; // types
 		var = 0; proc = 1; // object kinds
 
 		// opcodes
@@ -66,22 +68,21 @@ PRODUCTIONS
           "END" .
 
   VarDecl =   "BEGIN_VAR"
-              ident : "Integer" ; {ident ":" "Integer" ";"}
-              "END_VAR"
+              ident ":" "Integer" ";" {ident ":" "Integer" ";"}
+              "END_VAR" .
 
   Statements = Stat {Stat} .
 
   Stat =   ident ":=" Expr ";"
          | "print" "(" Expr ")" ";"
          | "WHILE" Condition "DO" Statements "END"
-         | "IF" Condition "THEN" Statements "END"
-         | "IF" Condition "THEN" Statements "ELSE" Statements "END" .
+         | "IF" Condition "THEN" Statements ["ELSE" Statements] "END" .
 
-  Expr = Term "(" { (+|-) Term } ")" .
+  Expr = Term "(" { ("+"|"-") Term } ")" .
 
-  Term = Fact "(" { (*|/) Fact } ")" .
+  Term = Fact "(" { ("*"|"/") Fact } ")" .
 
-  Fact = ident | number | "(" Expr ")"
+  Fact = ident | number | "(" Expr ")" .
 
   Condition = Expr Relop Expr .
 
@@ -94,7 +95,7 @@ PRODUCTIONS
 
 
 
-MIEC = .
+/* MIEC = . */
 
 
 END MIEC .
