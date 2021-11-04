@@ -4,7 +4,7 @@
 COMPILER MIEC
 
  
-  
+/*--------------------------------------------------------------------------*/
 CHARACTERS
   letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
   digit = "0123456789".
@@ -12,7 +12,7 @@ CHARACTERS
   lf  = '\n'.
   tab = '\t'.
 
-     
+/*--------------------------------------------------------------------------*/
 TOKENS
   ident  = letter {letter | digit}.
   number = digit {digit}.
@@ -24,8 +24,43 @@ COMMENTS
 
 IGNORE cr + lf + tab
 
-   
+
+/*--------------------------------------------------------------------------*/
 PRODUCTIONS
+  MIEC =  "PROGRAM" ident
+          [VarDecl]
+          "BEGIN"
+          Statements
+          "END" .
+
+  VarDecl =   "BEGIN_VAR"
+              ident : "Integer" ; {ident ":" "Integer" ";"}
+              "END_VAR"
+
+  Statements = Stat {Stat} .
+
+  Stat =   ident ":=" Expr ";"
+         | "print" "(" Expr ")" ";"
+         | "WHILE" Condition "DO" Statements "END"
+         | "IF" Condition "THEN" Statements "END"
+         | "IF" Condition "THEN" Statements "ELSE" Statements "END" .
+
+  Expr = Term "(" { (+|-) Term } ")" .
+
+  Term = Fact "(" { (*|/) Fact } ")" .
+
+  Fact = ident | number | "(" Expr ")"
+
+  Condition = Expr Relop Expr .
+
+  Relop =   "="
+          | "<="
+          | ">="
+          | "!="
+          | "<"
+          | ">" .
+
+
 
 MIEC = .
 
