@@ -32,6 +32,8 @@ PRODUCTIONS
           Statements
           "END" .
 
+          TODO: REMOVE ( AND )
+
   VarDecl =   "BEGIN_VAR"
               ident ":" "Integer" ";" {ident ":" "Integer" ";"}
               "END_VAR" .
