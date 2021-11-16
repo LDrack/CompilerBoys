@@ -5,8 +5,43 @@
 #include <sys/timeb.h>
 #include <wchar.h>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <ctime>
 
 using namespace std;
+
+// -in ..\Testbench_fuer_Studierende\testfiles\ok\if.miec -out .\out.miex
+
+const char* get_filename_ext(const char* filename) {
+	const char* dot = strrchr(filename, '.');
+	if (!dot || dot == filename) return "";
+	return dot + 1;
+}
+
+void writeReport(const char* filename, const int errorcount) {
+	ofstream o("MIECCompiler.report", ios::app);
+	if (!o.good()) {
+		o.close();
+		return;
+	}
+
+	time_t rawtime;
+	time(&rawtime);
+	struct tm* timeinfo = localtime(&rawtime);
+
+	o << put_time(timeinfo, "%c") << " => ";
+	o << filename << ": ";
+
+	if (errorcount == 0) {
+		o << "OK" << endl;
+	}
+	else {
+		o << "FAILED: " << errorcount << " error(s) detected" << endl;
+	}
+
+	o.close();
+}
 
 int main(int argc, char* argv[])
 {
@@ -15,9 +50,11 @@ int main(int argc, char* argv[])
 		cout << "Usage: MIECCompiler.exe -in <infile.miec> -out <file.iex>" << endl;
 	}
 	else if (strcmp(argv[1], "-in") || strcmp(argv[3], "-out")) {
-		cout << "argc: " << argc << endl;
-		cout << "argv[1]: " << argv[1] << endl;
-		cout << "argv[3]: " << argv[3] << endl;
+		cout << "Arguments -in and -out must be provided exactly." << endl;
+		cout << "Usage: MIECCompiler.exe -in <infile.miec> -out <file.iex>" << endl;
+	}
+	else if (strcmp(get_filename_ext(argv[2]), "miec") || strcmp(get_filename_ext(argv[4]), "iex")) {
+		cout << "Check file extensions. Only .miec and .iex are allowed." << endl;
 		cout << "Usage: MIECCompiler.exe -in <infile.miec> -out <file.iex>" << endl;
 	}
 	else {
@@ -34,6 +71,8 @@ int main(int argc, char* argv[])
 			//parser->gen->Interpret("MIEC.IN");
 			cout << "No errors" << endl;
 		}
+
+		writeReport(argv[2], parser->errors->count);
 
 		coco_string_delete(fileName);
 		//delete parser->gen;

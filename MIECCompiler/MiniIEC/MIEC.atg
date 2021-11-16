@@ -32,7 +32,7 @@ PRODUCTIONS
           Statements
           "END" .
 
-          TODO: REMOVE ( AND )
+          /* TODO: REMOVE ( AND ) */
 
   VarDecl =   "BEGIN_VAR"
               ident ":" "Integer" ";" {ident ":" "Integer" ";"}
@@ -45,9 +45,9 @@ PRODUCTIONS
          | "WHILE" Condition "DO" Statements "END"
          | "IF" Condition "THEN" Statements ["ELSE" Statements] "END" .
 
-  Expr = Term "(" { ("+"|"-") Term } ")" .
+  Expr = Term { ("+"|"-") Term } .
 
-  Term = Fact "(" { ("*"|"/") Fact } ")" .
+  Term = Fact { ("*"|"/") Fact } .
 
   Fact = ident | number | "(" Expr ")" .
 

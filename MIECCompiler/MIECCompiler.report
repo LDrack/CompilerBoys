@@ -1,0 +1,11 @@
+11/16/21 15:19:55 => ..\Testbench_fuer_Studierende\testfiles\ok\if.miec: OK
+11/16/21 15:21:34 => ..\Testbench_fuer_Studierende\testfiles\ok\fibonacci.miec: OK
+11/16/21 15:21:45 => ..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\arit.miec: OK
+11/16/21 15:21:54 => ..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\ArithLong.miec: OK
+11/16/21 15:22:01 => ..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\DuplicateConst.miec: OK
+11/16/21 15:22:08 => ..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\Multiplication.miec: OK
+11/16/21 15:22:20 => ..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\TestDivide.miec: OK
+11/16/21 15:23:13 => ..\Testbench_fuer_Studierende\testfiles\failed\xfail_empty.miec: OK
+11/16/21 15:23:22 => ..\Testbench_fuer_Studierende\testfiles\failed\xfail_progWrong.miec: FAILED: 2 error(s) detected
+11/16/21 15:23:29 => ..\Testbench_fuer_Studierende\testfiles\failed\xfail_TestDivByZero.miec: FAILED: 1 error(s) detected
+11/16/21 15:24:11 => ..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: OK
