@@ -1,13 +1,22 @@
-//#include <TypeSymbol.h>
+#ifndef TYPE_H__
+#define TYPE_H__
 
-class Type {
-	Type();
+#include "Object.h"
+//#include "TypeSymbol.h"
+
+class Type : Object {
 	virtual ~Type();
 	virtual size_t getSize();
-	//TypeSymbol getType() {
-		//return mType;
+	//TypeSymbol getNameSymbol() {
+		//return mNameSymbol;
 	//}
-private:
+
+protected:
+	Type();
 	size_t mSize;
-	//TypeSymbol mType;
+
+private:
+	//TypeSymbol mNameSymbol;
 };
+
+#endif
