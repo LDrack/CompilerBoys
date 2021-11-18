@@ -2,5 +2,6 @@
 
 class TypeSymbol : Symbol
 {
-	TypeSymbol(std::string const &name, Type const &type);
+	public:
+		TypeSymbol(std::string const &name, Type const &type);
 }
