@@ -125,11 +125,11 @@ OBJ_RELEASE_WIN = $(addprefix $(OBJDIR_RELEASE_WIN)/,$(SOURCES:%.cpp=%.o))
 
 ######## General
 all: make_coco debug release
-clean: clean_debug_linux clean_release_linux clean_debug_windows clean_release_windows
+clean: clean_debug_linux clean_release_linux #clean_debug_windows clean_release_windows
 rebuild: clean debug release
 
-debug Debug: debug_linux debug_windows
-release Release:  release_linux release_windows
+debug Debug: debug_linux #debug_windows
+release Release:  release_linux #release_windows
 
 ######## COCO\R
 make_coco:
