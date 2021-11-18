@@ -3,3 +3,6 @@ MIECCompiler/.vs/
 MIECCompiler/Debug/
 MIECCompiler/MiniIEC/Parser*
 MIECCompiler/MiniIEC/Scanner*
+Testbench_fuer_Studierende/out/
+Testbench_fuer_Studierende/WorkingDir/
+
