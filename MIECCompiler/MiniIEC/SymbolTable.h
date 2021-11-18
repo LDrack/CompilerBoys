@@ -1,5 +1,6 @@
 #include "Symbol.h"
 
+namespace MIEC {
 class SymbolTable
 {
 	public:
@@ -11,6 +12,7 @@ class SymbolTable
 		SymbolTable() = default;
 		SymbolTable(SymbolTable const&) = delete;
 		SymbolTable& operator= (SymbolTable const&) = delete;
+}
 }
 
 //init static member

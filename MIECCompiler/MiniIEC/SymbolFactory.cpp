@@ -2,6 +2,7 @@
 #include <algorithm>
 
 
+namespace MIEC {
 static SymbolFactory& SymbolFactory::GetInstance()
 {
 	if (mInstance == nullptr) mInstance = unique_ptr<SymbolFactory>(new SymbolFactory);
@@ -26,4 +27,5 @@ std::shared_ptr<Symbol> SymbolFactory::CreateConstInt(const std::string &name, c
 std::shared_ptr<Symbol> SymbolFactory::CreateTypeSym(const std::string &name, const Type &type)
 {
 	return std::make_shared<TypeSymbol>(name, type);
+}
 }

@@ -2,6 +2,7 @@
 #include <algorithm>
 
 
+namespace MIEC {
 static SymbolTable& SymbolTable::GetInstance()
 {
 	if (mInstance == nullptr) mInstance = unique_ptr<SymbolTable>(new SymbolTable);
@@ -24,4 +25,5 @@ std::shared_ptr<Symbol> SymbolTable::Find(std::string const &name)
 			{
 				return symbol.GetName() == name;
 			});
+}
 }

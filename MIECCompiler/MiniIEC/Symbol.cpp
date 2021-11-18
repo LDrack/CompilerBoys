@@ -1,5 +1,6 @@
 #include "Symbol.h"
 
+namespace MIEC {
 Symbol::Symbol(std::string const &name, Type const &type) : mName(name), mType(type)
 {}
 
@@ -11,4 +12,5 @@ std::string* Symbol::GetName()
 Type* Symbol::GetType();
 {
 	return &mType;
+}
 }

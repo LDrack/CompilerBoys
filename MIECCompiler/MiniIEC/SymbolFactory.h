@@ -2,6 +2,7 @@
 #include "ConstIntSymbol.h"
 #include "TypeSymbol.h"
 
+namespace MIEC {
 class SymbolFactory
 {
 	public:
@@ -21,5 +22,6 @@ class SymbolFactory
 		std::list<std::shared_ptr<Symbol>> mTable;
 }
 
+}
 //init static member
 unique_ptr<SymbolTable> Singleton::mInstance{nullptr};

@@ -1,5 +1,6 @@
 #include "Symbol.h"
 
+namespace MIEC {
 class VarSymbol : Symbol
 {
 	public:
@@ -7,4 +8,5 @@ class VarSymbol : Symbol
 		size_t GetOffset();
 	private:
 		size_t mOffset;
+}
 }

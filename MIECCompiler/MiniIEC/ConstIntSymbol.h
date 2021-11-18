@@ -1,5 +1,6 @@
 #include "Symbol.h"
 
+namespace MIEC {
 class ConstIntSymbol : Symbol
 {
 	public:
@@ -7,4 +8,5 @@ class ConstIntSymbol : Symbol
 		int GetValue();
 	private:
 		int mValue;
+}
 }

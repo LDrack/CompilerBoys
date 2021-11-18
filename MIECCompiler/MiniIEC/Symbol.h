@@ -1,6 +1,8 @@
 #include <string>
 #include "Type.h"
 
+namespace MIEC {
+
 class Symbol
 {
 	public:
@@ -13,3 +15,5 @@ class Symbol
 		std::string mName;
 		Type mType;
 };
+
+}
