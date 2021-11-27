@@ -3,13 +3,15 @@
 
 #include "Type.h"
 
-class ArrayType : private Type {
-	ArrayType(Type elemType) : mElemType{ elemType };
+namespace MIEC {
+	class ArrayType : public Type {
+		ArrayType(Type* elemType) : mElemType(elemType) {}
 
-	size_t getSize();
+		size_t getSize();
 
-private:
-	Type mElemType;
-};
+	private:
+		Type* mElemType;
+	};
+}
 
 #endif

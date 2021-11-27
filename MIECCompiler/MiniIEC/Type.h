@@ -4,19 +4,19 @@
 #include "Object.h"
 //#include "TypeSymbol.h"
 
-class Type : Object {
-	virtual ~Type();
-	virtual size_t getSize();
-	//TypeSymbol getNameSymbol() {
-		//return mNameSymbol;
-	//}
+namespace MIEC {
+	class Type : public Object {
+	public:
+		virtual ~Type();
+		Type();
+		virtual size_t getSize() = 0;
+		//TypeSymbol getNameSymbol() {
+		//	return mNameSymbol;
+		//}
 
-protected:
-	Type();
-	size_t mSize;
-
-private:
-	//TypeSymbol mNameSymbol;
-};
+	private:
+		//TypeSymbol mNameSymbol;
+	};
+}
 
 #endif

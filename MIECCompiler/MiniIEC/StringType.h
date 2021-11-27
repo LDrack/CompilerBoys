@@ -3,11 +3,15 @@
 
 #include "Type.h"
 
-class StringType : private Type {
-	size_t getSize();
+namespace MIEC {
 
-private:
-	size_t mLen;
-};
+	class StringType : public Type {
+		size_t getSize() { return mLen; }
+
+	private:
+		size_t mLen;
+	};
+
+}
 
 #endif

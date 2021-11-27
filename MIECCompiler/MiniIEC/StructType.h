@@ -3,10 +3,10 @@
 
 #include "Type.h"
 
-class StructType : private Type {
-	size_t getSize();
-
-private:
-};
+namespace MIEC {
+	class StructType : public Type {
+		size_t getSize() { return 4711; }
+	};
+}
 
 #endif
