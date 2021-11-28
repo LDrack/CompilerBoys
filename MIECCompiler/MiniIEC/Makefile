@@ -14,8 +14,8 @@ SOURCES := $(shell ls *.cpp)
 PROJNAME = MIECCompiler
 LIBDIR =
 INC =
-LDFLAGS = -std=c++11 -static-libstdc++ -static-libgcc -Wl,-Bstatic -pthread
-CFLAGS = -Wall -fexceptions -std=c++11 -static-libstdc++ -static-libgcc
+LDFLAGS = -std=c++14 -static-libstdc++ -static-libgcc -Wl,-Bstatic -pthread
+CFLAGS = -Wall -fexceptions -std=c++14 -static-libstdc++ -static-libgcc
 LIB=
 
 # COCO
