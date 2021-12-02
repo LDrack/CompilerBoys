@@ -79,9 +79,7 @@ Term = ( Fact [ ('*'|'/') Fact]) .
 
 Fact =                            (. int value; .)
     ( Ident<name>                 (. .)
-     | Number<value>              (. symtab.Add( symfac.CreateConstInt(value)); 
-     
-     .)
+     | Number<value>              (. symtab.Add( symfac.CreateConstInt(value)); .)
      | '(' Expr ')' 
      ).
 

@@ -1,7 +1,20 @@
-
+#include "../SymbolTable.h"
+#include "../SymbolFactory.h"
+// #include <string>
+#include <charconv>
+// #include <system_error>
 
 
 COMPILER MIEC
+
+    SymbolTable   *tab;
+    SymbolFactory *fac;
+    // CodeGenerator *gen;
+
+	void Err(wchar_t* msg) {
+		errors->Error(la->line, la->col, msg);
+	}
+
 
   
 CHARACTERS
@@ -32,7 +45,6 @@ PRODUCTIONS
           Statements
           "END" .
 
-          /* TODO: REMOVE ( AND ) */
 
   VarDecl =   "BEGIN_VAR"
               ident ":" "Integer" ";" {ident ":" "Integer" ";"}
@@ -49,7 +61,11 @@ PRODUCTIONS
 
   Term = Fact { ("*"|"/") Fact } .
 
-  Fact = ident | number | "(" Expr ")" .
+  Fact =                (. int value; .)
+  ( Ident<name> 
+  | Number<value>       (. symtab.Add( symfac.CreateConstInt(value)); .)
+  | "(" Expr ")" 
+  ).
 
   Condition = Expr Relop Expr .
 
@@ -59,6 +75,18 @@ PRODUCTIONS
           | "!="
           | "<"
           | ">" .
+
+/*------------------------------------------------------------------------*/
+  Ident<wchar_t* &name>
+= ident                  (. name = coco_string_create(t->val); .)
+.
+
+/*------------------------------------------------------------------------*/
+Number<int& value> = 
+number                    (. int ret = swscanf(t->val, L"%d", &value);
+                             if (ret < 1) Err(L"parsing number failed"); .)
+.
+
 
 
 

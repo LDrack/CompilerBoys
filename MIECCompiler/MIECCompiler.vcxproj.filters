@@ -92,4 +92,9 @@
       <Filter>Source Files</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MiniIEC\MIEC_Hias.atg">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
