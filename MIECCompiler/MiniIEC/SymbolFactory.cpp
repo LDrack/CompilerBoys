@@ -18,7 +18,6 @@ void SymbolFactory::Delete()
 
 std::shared_ptr<VarSymbol> SymbolFactory::CreateVar(std::wstring const &name, Type * type)
 {
-//static size_t offset = 0;
 	return std::make_shared<VarSymbol>(name, type, 0);
 }
 

@@ -16,8 +16,12 @@ void SymbolTable::Delete()
 
 bool SymbolTable::Add(std::shared_ptr<Symbol> symbol)
 {
-	mTable.push_back(symbol);
-	return true;
+	if(Find(*symbol->GetName()) == nullptr)
+	{
+		mTable.push_back(symbol);
+		return true;
+	}
+	return false;
 }
 
 std::shared_ptr<Symbol> SymbolTable::Find(std::wstring const &name)

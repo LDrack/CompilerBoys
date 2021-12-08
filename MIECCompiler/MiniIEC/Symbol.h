@@ -9,7 +9,7 @@ class Symbol
 {
 	public:
 		Symbol() = delete;
-		std::wstring* GetName();
+		std::wstring const* GetName();
 		Type* GetType();
 	protected:
 		Symbol(std::wstring const &name, Type *type);
