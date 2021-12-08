@@ -60,7 +60,7 @@ PRODUCTIONS
   Ident<name> ":"
   Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
   {Ident<name> ":"
-  Type<type> ";"}           (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
+  Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
   .
 
   Statements = Stat {Stat} .
