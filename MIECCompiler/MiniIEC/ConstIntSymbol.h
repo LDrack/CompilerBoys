@@ -5,7 +5,7 @@ namespace MIEC {
 class ConstIntSymbol : public Symbol
 {
 	public:
-		ConstIntSymbol(std::wstring const &name, Type *type, int value);
+		ConstIntSymbol(std::wstring const &name, Kind type, int value);
 		int GetValue();
 	private:
 		int mValue;

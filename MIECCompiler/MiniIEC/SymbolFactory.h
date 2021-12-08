@@ -12,9 +12,9 @@ class SymbolFactory
 		static SymbolFactory& GetInstance();
 		static void Delete();
 
-		std::shared_ptr<VarSymbol> CreateVar(std::wstring const &name, Type * type);
+		std::shared_ptr<VarSymbol> CreateVar(std::wstring const &name, Kind type);
 		std::shared_ptr<ConstIntSymbol> CreateConstInt(int value);
-		std::shared_ptr<TypeSymbol> CreateTypeSym(wchar_t * name);
+		std::shared_ptr<TypeSymbol> CreateTypeSym(std::wstring const &name);
 
 	private:
 		SymbolFactory() = default;

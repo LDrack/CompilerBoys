@@ -1,4 +1,5 @@
 #include "SymbolTable.h"
+#include "SymbolFactory.h"
 #include <algorithm>
 
 
@@ -6,6 +7,7 @@ namespace MIEC {
 SymbolTable& SymbolTable::GetInstance()
 {
 	if (mInstance == nullptr) mInstance = std::unique_ptr<SymbolTable>(new SymbolTable);
+	mFac = &SymbolFactory::GetInstance();
 	return *mInstance;
 }
 
@@ -14,7 +16,7 @@ void SymbolTable::Delete()
 	mInstance.reset();
 }
 
-bool SymbolTable::Add(std::shared_ptr<Symbol> symbol)
+bool SymbolTable::Insert(std::shared_ptr<Symbol> symbol)
 {
 	if(Find(*symbol->GetName()) == nullptr)
 	{
@@ -22,6 +24,18 @@ bool SymbolTable::Add(std::shared_ptr<Symbol> symbol)
 		return true;
 	}
 	return false;
+}
+
+bool SymbolTable::Add(int const value)
+{
+	std::shared_ptr<Symbol> sym = mFac->CreateConstInt(value);
+	return Insert(sym);
+}
+
+bool SymbolTable::Add(std::wstring const &name, Kind type)
+{
+	std::shared_ptr<Symbol> sym = mFac->CreateVar(name, type);
+	return Insert(sym);
 }
 
 std::shared_ptr<Symbol> SymbolTable::Find(std::wstring const &name)

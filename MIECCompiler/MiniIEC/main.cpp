@@ -11,6 +11,7 @@ using namespace std;
 
 // set mInstanc
 std::unique_ptr<MIEC::SymbolTable> MIEC::SymbolTable::mInstance{nullptr};
+MIEC::SymbolFactory* MIEC::SymbolTable::mFac{nullptr};
 std::unique_ptr<MIEC::SymbolFactory> MIEC::SymbolFactory::mInstance{nullptr};
 
 
@@ -69,7 +70,6 @@ int main(int argc, char* argv[])
 		MIEC::Scanner* scanner = new MIEC::Scanner(fileName);
 		MIEC::Parser* parser = new MIEC::Parser(scanner);
 		parser->tab = &MIEC::SymbolTable::GetInstance();
-		parser->fac = &MIEC::SymbolFactory::GetInstance();
 
 
 		//parser->gen = new MIEC::CodeGenerator();

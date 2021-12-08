@@ -1,6 +1,6 @@
 #include "SymbolTable.h"
 #include "SymbolFactory.h"
-#include "BasicType.h"
+#include "Kind.h"
 // #include <string>
 #include <charconv>
 // #include <system_error>
@@ -15,8 +15,6 @@ COMPILER MIEC
 	void Err(wchar_t* msg) {
 		errors->Error(la->line, la->col, msg);
 	}
-
-
 
 	int // types
 	  undef, integer;
@@ -56,12 +54,12 @@ PRODUCTIONS
           "END" .
 
 
-  VarDecl =                 (. wchar_t* name; int type; .)
+  VarDecl =                 (. wchar_t* name; Kind type; .)
   "BEGIN_VAR"
   Ident<name> ":"
-  Type<type> ";"            (. if(!tab->Add( fac->CreateVar(name, new BasicType(type)))){Err(L"Insert new var failed");} .)
+  Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
   {Ident<name> ":"
-  Type<type> ";"}           (. if(!tab->Add( fac->CreateVar(name, new BasicType(type)))){Err(L"Insert new var failed");} .)
+  Type<type> ";"}           (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
   "END_VAR" .
 
   Statements = Stat {Stat} .
@@ -77,7 +75,7 @@ PRODUCTIONS
 
   Fact =                (. int value; wchar_t* name; .)
   ( Ident<name>			(. if(tab->Find(name) == nullptr){Err(L"Variable not defined");} .)
-  | Number<value>       (. tab->Add( fac->CreateConstInt(value)); .)
+  | Number<value>       (. tab->Add( value); .)
   | "(" Expr ")" 
   ).
 
@@ -102,9 +100,9 @@ number                    (. int ret = swscanf(t->val, L"%d", &value);
 .
 
 /*------------------------------------------------------------------------*/
-Type<int &type>
-=                        (. type = undef; .)
- ( "Integer"             (. type = integer; .)
+Type<Kind &type>
+=                        (. type = Kind::eUndef; .)
+ ( "Integer"             (. type = Kind::eInt; .)
  ).
 
 

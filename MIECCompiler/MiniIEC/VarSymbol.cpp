@@ -2,7 +2,7 @@
 
 
 namespace MIEC {
-VarSymbol::VarSymbol(std::wstring const &name, Type *type, size_t offset) : Symbol(name, type), mOffset(offset)
+VarSymbol::VarSymbol(std::wstring const &name, Kind type, size_t offset) : Symbol(name, type), mOffset(offset)
 {}
 
 size_t VarSymbol::GetOffset()

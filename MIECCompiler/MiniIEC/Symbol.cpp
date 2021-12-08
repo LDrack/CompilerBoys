@@ -1,7 +1,7 @@
 #include "Symbol.h"
 
 namespace MIEC {
-Symbol::Symbol(std::wstring const &name, Type *type) : mName(name), mType(type)
+Symbol::Symbol(std::wstring const &name, Kind type) : mName(name), mType(type)
 {}
 
 std::wstring* Symbol::GetName()
@@ -9,7 +9,7 @@ std::wstring* Symbol::GetName()
 	return &mName;
 }
 
-Type* Symbol::GetType()
+Kind Symbol::GetType()
 {
 	return mType;
 }

@@ -6,7 +6,7 @@ namespace MIEC {
 class VarSymbol : public Symbol
 {
 	public:
-		VarSymbol(std::wstring const &name, Type *type, size_t offset);
+		VarSymbol(std::wstring const &name, Kind type, size_t offset);
 		size_t GetOffset();
 	private:
 		size_t mOffset;

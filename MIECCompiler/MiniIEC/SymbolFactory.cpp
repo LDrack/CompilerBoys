@@ -16,7 +16,7 @@ void SymbolFactory::Delete()
 	mInstance.reset();
 }
 
-std::shared_ptr<VarSymbol> SymbolFactory::CreateVar(std::wstring const &name, Type * type)
+std::shared_ptr<VarSymbol> SymbolFactory::CreateVar(std::wstring const &name, Kind type)
 {
 	return std::make_shared<VarSymbol>(name, type, 0);
 }
@@ -24,11 +24,11 @@ std::shared_ptr<VarSymbol> SymbolFactory::CreateVar(std::wstring const &name, Ty
 std::shared_ptr<ConstIntSymbol> SymbolFactory::CreateConstInt(int value)
 {
 	return std::make_shared<ConstIntSymbol>(std::to_wstring(value),
-			new BasicType(BasicType::Kind::eInt), value);
+			Kind::eInt, value);
 }
 
-std::shared_ptr<TypeSymbol> SymbolFactory::CreateTypeSym(wchar_t * name)
+std::shared_ptr<TypeSymbol> SymbolFactory::CreateTypeSym(std::wstring const &name)
 {
-	return std::make_shared<TypeSymbol>(name, new BasicType(BasicType::Kind::eUndef));
+	return std::make_shared<TypeSymbol>(name, Kind::eUndef);
 }
 }

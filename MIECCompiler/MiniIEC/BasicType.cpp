@@ -1,7 +1,7 @@
 #include "BasicType.h"
 
 namespace MIEC{
-	BasicType::BasicType(int kind) : mKind((Kind)kind)
+	BasicType::BasicType(Kind kind) : mKind((Kind)kind)
 	{}
 
 	size_t BasicType::getSize() {

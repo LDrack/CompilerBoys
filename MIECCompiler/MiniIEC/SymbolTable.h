@@ -1,4 +1,4 @@
-#include "Symbol.h"
+#include "SymbolFactory.h"
 #include <memory>
 #include <list>
 #include <ostream>
@@ -12,16 +12,20 @@ class SymbolTable
 		static SymbolTable& GetInstance();
 		static void Delete();
 
-		bool Add(std::shared_ptr<Symbol> symbol);
+		bool Add(std::wstring const &name, Kind kind);
+		bool Add(int const value);
 		std::shared_ptr<Symbol> Find(std::wstring const &name);
 		void Print(std::wostream &ost);
 
 	private:
 		static std::unique_ptr<SymbolTable> mInstance;
+		static SymbolFactory* mFac;
 		SymbolTable() = default;
 		SymbolTable(SymbolTable const&) = delete;
 		SymbolTable& operator= (SymbolTable const&) = delete;
 		std::list<std::shared_ptr<Symbol>> mTable;
+
+		bool Insert(std::shared_ptr<Symbol> symbol);
 };
 }
 

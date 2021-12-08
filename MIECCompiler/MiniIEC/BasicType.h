@@ -2,12 +2,12 @@
 #define BASICTYPE_H__
 
 #include "Type.h"
+#include "Kind.h"
 
 namespace MIEC {
 	class BasicType : public Type {
 		public:
-			enum Kind{eUndef = 0, eInt = 1};
-			BasicType(int kind);
+			BasicType(Kind kind);
 			size_t getSize() override;
 		private:
 			Kind mKind;
