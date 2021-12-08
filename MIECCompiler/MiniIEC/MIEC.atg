@@ -48,19 +48,20 @@ IGNORE cr + lf + tab
 /*--------------------------------------------------------------------------*/
 PRODUCTIONS
   MIEC =  "PROGRAM" ident
+          "BEGIN_VAR"
           [VarDecl]
+          "END_VAR"
           "BEGIN"
           Statements
           "END" .
 
 
   VarDecl =                 (. wchar_t* name; Kind type; .)
-  "BEGIN_VAR"
   Ident<name> ":"
   Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
   {Ident<name> ":"
   Type<type> ";"}           (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
-  "END_VAR" .
+  .
 
   Statements = Stat {Stat} .
 
