@@ -28,4 +28,12 @@ std::shared_ptr<Symbol> SymbolTable::Find(std::wstring const &name)
 	}
 	return nullptr;
 }
+
+void SymbolTable::Print(std::wostream &ost)
+{
+	ost << "---Begin SymbolTable---" << std::endl;
+	for_each(mTable.begin(), mTable.end(), [&ost](auto it)
+			{ost << *it->GetName() << std::endl;});
+	ost << "---End SymbolTable---" << std::endl;
+}
 }

@@ -1,6 +1,7 @@
 #include "Symbol.h"
 #include <memory>
 #include <list>
+#include <ostream>
 
 #ifndef SYMBOLTABLE_H
 #define SYMBOLTABLE_H
@@ -13,6 +14,7 @@ class SymbolTable
 
 		bool Add(std::shared_ptr<Symbol> symbol);
 		std::shared_ptr<Symbol> Find(std::wstring const &name);
+		void Print(std::wostream &ost);
 
 	private:
 		static std::unique_ptr<SymbolTable> mInstance;

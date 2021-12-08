@@ -14,8 +14,6 @@ std::unique_ptr<MIEC::SymbolTable> MIEC::SymbolTable::mInstance{nullptr};
 std::unique_ptr<MIEC::SymbolFactory> MIEC::SymbolFactory::mInstance{nullptr};
 
 
-// TODO
-// - alle Strings durch wchar* ersetzen
 
 
 
@@ -77,6 +75,7 @@ int main(int argc, char* argv[])
 		//parser->gen = new MIEC::CodeGenerator();
 
 		parser->Parse();
+		parser->tab->Print(std::wcout);
 		if (parser->errors->count == 0) {
 			//parser->gen->Decode();
 			//parser->gen->Interpret("MIEC.IN");
