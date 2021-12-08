@@ -9,12 +9,12 @@ class Symbol
 {
 	public:
 		Symbol() = delete;
-		std::string* GetName();
+		std::wstring* GetName();
 		Type* GetType();
 	protected:
-		Symbol(std::string const &name, Type *type);
+		Symbol(std::wstring const &name, Type *type);
 	private:
-		std::string mName;
+		std::wstring mName;
 		Type* mType;
 };
 

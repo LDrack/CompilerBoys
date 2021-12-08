@@ -2,7 +2,7 @@
 
 
 namespace MIEC {
-ConstIntSymbol::ConstIntSymbol(std::string const &name, Type *type, int value) : Symbol(name, type), mValue(value)
+ConstIntSymbol::ConstIntSymbol(std::wstring const &name, Type *type, int value) : Symbol(name, type), mValue(value)
 {}
 
 int ConstIntSymbol::GetValue()

@@ -1,5 +1,6 @@
 #include "SymbolTable.h"
 #include "SymbolFactory.h"
+#include "BasicType.h"
 // #include <string>
 #include <charconv>
 // #include <system_error>
@@ -58,9 +59,9 @@ PRODUCTIONS
   VarDecl =                 (. wchar_t* name; int type; .)
   "BEGIN_VAR"
   Ident<name> ":"
-  Type<type> ";"            (. if(!tab->Add( fac->CreateVar(name, type))){Err(L"Insert new var failed");} .)
-  {Ident<name> ":"          
-  Type<type> ";"}           (. if(!tab->Add( fac->CreateIntVar(name))){Err(L"Insert new var failed");} .)
+  Type<type> ";"            (. if(!tab->Add( fac->CreateVar(name, new BasicType(type)))){Err(L"Insert new var failed");} .)
+  {Ident<name> ":"
+  Type<type> ";"}           (. if(!tab->Add( fac->CreateVar(name, new BasicType(type)))){Err(L"Insert new var failed");} .)
   "END_VAR" .
 
   Statements = Stat {Stat} .
@@ -75,7 +76,7 @@ PRODUCTIONS
   Term = Fact { ("*"|"/") Fact } .
 
   Fact =                (. int value; wchar_t* name; .)
-  ( Ident<name> 
+  ( Ident<name>			(. if(tab->Find(name) == nullptr){Err(L"Variable not defined");} .)
   | Number<value>       (. tab->Add( fac->CreateConstInt(value)); .)
   | "(" Expr ")" 
   ).

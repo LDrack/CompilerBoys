@@ -5,7 +5,7 @@
 namespace MIEC {
 class TypeSymbol : Symbol {
 	public:
-		TypeSymbol(std::string const &name, Type *type);
+		TypeSymbol(std::wstring const &name, Type *type);
 };
 }
 #endif

@@ -1,7 +1,5 @@
 #include "Parser.h"
 #include "Scanner.h"
-#include "SymbolTable.h"
-#include "SymbolFactory.h"
 #include <sys/timeb.h>
 #include <wchar.h>
 #include <iostream>
@@ -10,6 +8,11 @@
 #include <ctime>
 
 using namespace std;
+
+// set mInstanc
+std::unique_ptr<MIEC::SymbolTable> MIEC::SymbolTable::mInstance{nullptr};
+std::unique_ptr<MIEC::SymbolFactory> MIEC::SymbolFactory::mInstance{nullptr};
+
 
 // TODO
 // - alle Strings durch wchar* ersetzen
@@ -64,11 +67,11 @@ int main(int argc, char* argv[])
 		cout << "Usage: MIECCompiler.exe -in <infile.miec> -out <file.iex>" << endl;
 	}
 	else {
-		wchar_t* fileName = coco_string_create(argv[2]);
+		wchar_t* fileName = MIEC::coco_string_create(argv[2]);
 		MIEC::Scanner* scanner = new MIEC::Scanner(fileName);
 		MIEC::Parser* parser = new MIEC::Parser(scanner);
-		//parser->tab = MIEC::SymbolTable::GetInstance();
-		//parser->fac = MIEC::SymbolFactory::GetInstance();
+		parser->tab = &MIEC::SymbolTable::GetInstance();
+		parser->fac = &MIEC::SymbolFactory::GetInstance();
 
 
 		//parser->gen = new MIEC::CodeGenerator();
@@ -82,7 +85,7 @@ int main(int argc, char* argv[])
 
 		writeReport(argv[2], parser->errors->count);
 
-		coco_string_delete(fileName);
+		MIEC::coco_string_delete(fileName);
 		//delete parser->gen;
 		//delete parser->tab;
 		delete parser;

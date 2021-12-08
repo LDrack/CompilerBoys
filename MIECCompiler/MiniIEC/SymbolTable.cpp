@@ -20,7 +20,7 @@ bool SymbolTable::Add(std::shared_ptr<Symbol> symbol)
 	return true;
 }
 
-std::shared_ptr<Symbol> SymbolTable::Find(std::string const &name)
+std::shared_ptr<Symbol> SymbolTable::Find(std::wstring const &name)
 {
 	for(auto elem : mTable) {
 		if (name.compare(*elem->GetName())==0)

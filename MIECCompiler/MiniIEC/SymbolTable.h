@@ -12,7 +12,7 @@ class SymbolTable
 		static void Delete();
 
 		bool Add(std::shared_ptr<Symbol> symbol);
-		std::shared_ptr<Symbol> Find(std::string const &name);
+		std::shared_ptr<Symbol> Find(std::wstring const &name);
 
 	private:
 		static std::unique_ptr<SymbolTable> mInstance;
@@ -24,5 +24,5 @@ class SymbolTable
 }
 
 //init static member
-std::unique_ptr<MIEC::SymbolTable> MIEC::SymbolTable::mInstance{nullptr};
+//std::unique_ptr<MIEC::SymbolTable> MIEC::SymbolTable::mInstance{nullptr};
 #endif

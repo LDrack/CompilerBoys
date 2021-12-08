@@ -12,9 +12,9 @@ class SymbolFactory
 		static SymbolFactory& GetInstance();
 		static void Delete();
 
-		std::shared_ptr<VarSymbol> CreateVar(std::string const &name, Type * type, size_t offset);
-		std::shared_ptr<ConstIntSymbol> CreateConstInt(std::string const &name, Type * type, int value);
-		std::shared_ptr<TypeSymbol> CreateTypeSym(std::string const &name, Type * type);
+		std::shared_ptr<VarSymbol> CreateVar(std::wstring const &name, Type * type);
+		std::shared_ptr<ConstIntSymbol> CreateConstInt(int value);
+		std::shared_ptr<TypeSymbol> CreateTypeSym(wchar_t * name);
 
 	private:
 		SymbolFactory() = default;
@@ -26,5 +26,5 @@ class SymbolFactory
 
 }
 //init static member
-std::unique_ptr<MIEC::SymbolFactory> MIEC::SymbolFactory::mInstance{nullptr};
+//std::unique_ptr<MIEC::SymbolFactory> MIEC::SymbolFactory::mInstance{nullptr};
 #endif
