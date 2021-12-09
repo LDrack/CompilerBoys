@@ -9,18 +9,21 @@
 namespace MIEC {
 	class DACEntry : Object {
 	public:
-		DACEntry(OpClass op, Operand* first, Operand* second, std::wstring label = 0);
+		DACEntry(OpKind op, Operand* first, Operand* second, int nr, std::wstring label = 0);
 
 		Operand* getFirst();
 		Operand* getSecond();
 		OpKind getOp();
+		int getNr();
 		std::wstring* getLabel();
+		void Print(std::wostream& wost);
 
 	private:
 		Operand* mFirst;
 		Operand* mSecond;
 		OpKind mOp;
 		std::wstring mLabel;
+		int mNr;
 	};
 }
 

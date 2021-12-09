@@ -1,6 +1,8 @@
 #include "SymbolTable.h"
 #include "SymbolFactory.h"
 #include "Kind.h"
+#include "OpKind.h"
+#include "DACGenerator.h"
 // #include <string>
 #include <charconv>
 // #include <system_error>
@@ -10,6 +12,8 @@ COMPILER MIEC
 
     SymbolTable   *tab;
     SymbolFactory *fac;
+    DACGenerator dac;
+    
     // CodeGenerator *gen;
 
 	void Err(wchar_t* msg) {
@@ -70,17 +74,31 @@ PRODUCTIONS
          | "WHILE" Condition "DO" Statements "END"
          | "IF" Condition "THEN" Statements ["ELSE" Statements] "END" .
 
-  Expr = Term { ("+"|"-") Term } .
+  Condition<Operand* op, Operand* op2>  (. OpKind opKind; .)
+  = Expr<op>
+  [ Relop<opKind>
+    Expr<op2>                           (. dac.AddStat(opKind, op, op2) .)
+  ].
 
-  Term = Fact { ("*"|"/") Fact } .
+  Expr<Operand* op, Operand* op2> = (. OpKind opKind; .)
+    Term<op>
+    { AddOp<opKind>
+      Term<op2>                     (. dac.AddStat(opKind, op, op2) .)
+    } .
 
-  Fact =                (. int value; wchar_t* name; .)
-  ( Ident<name>			(. if(tab->Find(name) == nullptr){Err(L"Variable not defined");} .)
-  | Number<value>       (. tab->Add( value); .)
-  | "(" Expr ")" 
+  Term<Operand* op, Operand* op2> = (. OpKind opKind; .)
+  Fact<op> 
+  { MulOp<opKind>
+    Fact<op2>           (. dac.AddStat(opKind, op, op2) .)
+  } .
+
+  Fact<Operand* op> =   (. int value; wchar_t* name; Operand* op; Symbol* sym; .)
+  ( Ident<name>			(. sym = tab->Find(name); if(sym == nullptr){Err(L"Variable not defined");}
+                           op = new SymOperand(sym); .)
+  | Number<value>       (. sym = tab->Find(name); if(sym == nullptr){sym = tab->Add(value);}
+                           op = new SymOperand(sym); .)
+  | "(" Expr<op> ")" 
   ).
-
-  Condition = Expr Relop Expr .
 
   Relop =   "="
           | "<="
@@ -106,7 +124,18 @@ Type<Kind &type>
  ( "Integer"             (. type = Kind::eInt; .)
  ).
 
-
+/*------------------------------------------------------------------------*/
+MulOp<OpKind op>
+=
+  ( '*'                  (. op = OpKind::eMultiply; .)
+  | '/'                  (. op = OpKind::eDivide; .)
+  ).
+/*------------------------------------------------------------------------*/
+AddOp<OpKind op>
+=
+  ( '+'	                 (. op = OpKind::eAdd; .)
+  | '-'                  (. op = OpKind::eSubtract; .)
+  ).
 
 /* MIEC = . */
 

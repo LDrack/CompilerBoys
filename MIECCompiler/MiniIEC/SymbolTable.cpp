@@ -16,23 +16,23 @@ void SymbolTable::Delete()
 	mInstance.reset();
 }
 
-bool SymbolTable::Insert(std::shared_ptr<Symbol> symbol)
+std::shared_ptr<Symbol> SymbolTable::Insert(std::shared_ptr<Symbol> symbol)
 {
 	if(Find(*symbol->GetName()) == nullptr)
 	{
 		mTable.push_back(symbol);
-		return true;
+		return symbol;
 	}
-	return false;
+	return nullptr;
 }
 
-bool SymbolTable::Add(int const value)
+std::shared_ptr<Symbol> SymbolTable::Add(int const value)
 {
 	std::shared_ptr<Symbol> sym = mFac->CreateConstInt(value);
 	return Insert(sym);
 }
 
-bool SymbolTable::Add(std::wstring const &name, Kind type)
+std::shared_ptr<Symbol> SymbolTable::Add(std::wstring const &name, Kind type)
 {
 	std::shared_ptr<Symbol> sym = mFac->CreateVar(name, type);
 	return Insert(sym);

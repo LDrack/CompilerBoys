@@ -10,6 +10,8 @@ namespace MIEC {
 	public:
 		DACOperand(DACEntry* entry);
 		DACEntry* getDACEntry();
+		void Print(std::wostream& wost);
+
 	private:
 		DACEntry* mEntry;
 	};

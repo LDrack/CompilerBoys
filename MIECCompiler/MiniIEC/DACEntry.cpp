@@ -1,8 +1,8 @@
 #include "DACEntry.h"
 
 namespace MIEC {
-    DACEntry::DACEntry(OpClass op, Operand* first, Operand* second, std::wstring label) :
-        mOp(op), mFirst(first), mSecond(second), mLabel(label)
+    DACEntry::DACEntry(OpKind op, Operand* first, Operand* second, int nr, std::wstring label) :
+        mOp(op), mFirst(first), mSecond(second), mNr(nr), mLabel(label)
     {
     }
 
@@ -21,8 +21,19 @@ namespace MIEC {
         return mOp;
     }
 
+    int DACEntry::getNr()
+    {
+        return mNr;
+    }
+
     std::wstring* DACEntry::getLabel()
     {
         return &mLabel;
+    }
+    void DACEntry::Print(std::wostream& wost)
+    {
+        mFirst->Print(wost);
+        wost << " <" << (int)mOp << "> ";
+        mSecond->Print(wost);
     }
 }

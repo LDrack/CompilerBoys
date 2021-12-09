@@ -10,4 +10,8 @@ namespace MIEC {
     {
         return nullptr;
     }
+    void DACOperand::Print(std::wostream& wost)
+    {
+        wost << "(" << mEntry->getNr() << ")";
+    }
 }

@@ -9,8 +9,9 @@ namespace MIEC {
 	class SymOperand : Operand {
 	public:
 		SymOperand(Symbol* sym);
-		//OpClass getOpClass();
 		Symbol* getSymbol();
+		void Print(std::wostream& wost);
+
 	private:
 		Symbol* mSymbol;
 	};

@@ -12,4 +12,9 @@ namespace MIEC {
         return mSymbol;
     }
 
+    void SymOperand::Print(std::wostream& wost)
+    {
+        wost << "(" << mSymbol->GetName() << ")";
+    }
+
 }

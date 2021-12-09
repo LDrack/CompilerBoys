@@ -12,8 +12,8 @@ class SymbolTable
 		static SymbolTable& GetInstance();
 		static void Delete();
 
-		bool Add(std::wstring const &name, Kind kind);
-		bool Add(int const value);
+		std::shared_ptr<Symbol> Add(std::wstring const &name, Kind kind);
+		std::shared_ptr<Symbol> Add(int const value);
 		std::shared_ptr<Symbol> Find(std::wstring const &name);
 		void Print(std::wostream &ost);
 
@@ -25,7 +25,7 @@ class SymbolTable
 		SymbolTable& operator= (SymbolTable const&) = delete;
 		std::list<std::shared_ptr<Symbol>> mTable;
 
-		bool Insert(std::shared_ptr<Symbol> symbol);
+		std::shared_ptr<Symbol> Insert(std::shared_ptr<Symbol> symbol);
 };
 }
 

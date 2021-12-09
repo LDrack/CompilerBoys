@@ -17,5 +17,9 @@ namespace MIEC {
 
 	void DACGenerator::Print(std::wostream& wost)
 	{
+		for (auto elem : mEntries) {
+			elem.Print(wost);
+			wost << std::endl;
+		}
 	}
 }
