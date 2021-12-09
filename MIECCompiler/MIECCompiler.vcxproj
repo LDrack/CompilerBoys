@@ -77,7 +77,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MiniIEC\BasicType.cpp" />
     <ClCompile Include="MiniIEC\ConstIntSymbol.cpp" />
+    <ClCompile Include="MiniIEC\DACGenerator.cpp" />
     <ClCompile Include="MiniIEC\main.cpp" />
     <ClCompile Include="MiniIEC\Parser.cpp" />
     <ClCompile Include="MiniIEC\Scanner.cpp" />
@@ -95,9 +97,12 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DACGenerator.h" />
     <ClInclude Include="MiniIEC\ArrayType.h" />
     <ClInclude Include="MiniIEC\BaseType.h" />
+    <ClInclude Include="MiniIEC\BasicType.h" />
     <ClInclude Include="MiniIEC\ConstIntSymbol.h" />
+    <ClInclude Include="MiniIEC\Kind.h" />
     <ClInclude Include="MiniIEC\Parser.h" />
     <ClInclude Include="MiniIEC\Scanner.h" />
     <ClInclude Include="MiniIEC\StringType.h" />

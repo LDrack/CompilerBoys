@@ -42,6 +42,12 @@
     <ClCompile Include="MiniIEC\VarSymbol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MiniIEC\BasicType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniIEC\DACGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniIEC\Parser.h">
@@ -84,6 +90,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiniIEC\Symbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniIEC\BasicType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniIEC\Kind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DACGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

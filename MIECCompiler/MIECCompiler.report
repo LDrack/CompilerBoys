@@ -9,3 +9,5 @@
 11/16/21 15:23:22 => ..\Testbench_fuer_Studierende\testfiles\failed\xfail_progWrong.miec: FAILED: 2 error(s) detected
 11/16/21 15:23:29 => ..\Testbench_fuer_Studierende\testfiles\failed\xfail_TestDivByZero.miec: FAILED: 1 error(s) detected
 11/16/21 15:24:11 => ..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: OK
+12/09/21 08:48:08 => ..\Testbench_fuer_Studierende\testfiles\ok\if.miec: OK
+12/09/21 09:01:41 => ..\Testbench_fuer_Studierende\testfiles\ok\if.miec: OK
