@@ -57,6 +57,9 @@
     <ClCompile Include="MiniIEC\DACOperand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MiniIEC\Operand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniIEC\Parser.h">
@@ -107,9 +110,6 @@
     <ClInclude Include="MiniIEC\Kind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DACGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MiniIEC\Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -129,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiniIEC\DACEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniIEC\DACGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
