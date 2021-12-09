@@ -13,13 +13,13 @@ namespace MIEC {
 
 		Operand* getFirst();
 		Operand* getSecond();
-		OpClass getOp();
+		OpKind getOp();
 		std::wstring* getLabel();
 
 	private:
 		Operand* mFirst;
 		Operand* mSecond;
-		OpClass mOp;
+		OpKind mOp;
 		std::wstring mLabel;
 	};
 }

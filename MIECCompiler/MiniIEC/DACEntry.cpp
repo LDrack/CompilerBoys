@@ -16,7 +16,7 @@ namespace MIEC {
         return mSecond;
     }
 
-    OpClass DACEntry::getOp()
+    OpKind DACEntry::getOp()
     {
         return mOp;
     }

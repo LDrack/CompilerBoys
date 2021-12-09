@@ -5,12 +5,12 @@ namespace MIEC {
 	{
 	}
 
-	bool DACGenerator::AddStat(OpClass op, Operand* first)
+	bool DACGenerator::AddStat(OpKind op, Operand* first)
 	{
 		return false;
 	}
 
-	bool DACGenerator::AddStat(OpClass op, Operand* first, Operand* second)
+	bool DACGenerator::AddStat(OpKind op, Operand* first, Operand* second)
 	{
 		return false;
 	}

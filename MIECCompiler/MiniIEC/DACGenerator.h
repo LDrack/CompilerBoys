@@ -13,8 +13,8 @@ namespace MIEC {
 	public:
 		DACGenerator();
 
-		bool AddStat(OpClass op, Operand* first);
-		bool AddStat(OpClass op, Operand* first, Operand* second);
+		bool AddStat(OpKind op, Operand* first);
+		bool AddStat(OpKind op, Operand* first, Operand* second);
 
 
 		void Print(std::wostream &wost);
