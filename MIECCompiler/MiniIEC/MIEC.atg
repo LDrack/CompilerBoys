@@ -3,6 +3,8 @@
 #include "Kind.h"
 #include "OpKind.h"
 #include "DACGenerator.h"
+#include "DACEntry.h"
+#include "Type.h"
 // #include <string>
 #include <charconv>
 // #include <system_error>
@@ -16,16 +18,26 @@ COMPILER MIEC
     
     // CodeGenerator *gen;
 
-	void Err(wchar_t* msg) {
-		errors->Error(la->line, la->col, msg);
-	}
+    void Err(wchar_t* msg) {
+        errors->Error(la->line, la->col, msg);
+    }
 
-	int // types
-	  undef, integer;
+    int // types
+      undef, integer;
 
-	void InitDeclarations() { // it must exist
-		undef = 0; integer = 1; // types
-	}
+    void InitDeclarations() { // it must exist
+        undef = 0; Integer = 1; // types
+    }
+
+
+    const Type *getIntegerType() {
+        constexpr wchar_t* typeName = L"[Type]Integer";
+        Symbol *sym = tab->Find(typeName);
+        if (!sym || sym->GetType() != Kind::eType) {
+            sym = tab.Insert(fac->CreateTypeSym(typeName, Kind::eInt));
+        }
+        return sym->GetType();
+    }
 
 
   
@@ -65,14 +77,40 @@ PRODUCTIONS
   Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
   {Ident<name> ":"
   Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
-  .
+          .
 
-  Statements = Stat {Stat} .
+/*------------------------------------------------------------------------*/
+Statements = Stat{ Stat } .
 
-  Stat =   ident ":=" Expr ";"
-         | "print" "(" Expr ")" ";"
-         | "WHILE" Condition "DO" Statements "END"
-         | "IF" Condition "THEN" Statements ["ELSE" Statements] "END" .
+Stat =                                          (. std::unique_ptr<DACEntry> entry; .)
+Assignment<entry>                               (. dac.AddStat(std::move(entry)) .)
+| "print" "(" Expr ")" ";"                      // TODO
+| Controlblock
+.
+    
+              
+Controlblock =
+"WHILE" Condition "DO" Statements "END"
+| "IF" Condition "THEN" Statements["ELSE" Statements] "END"
+.
+
+
+/*------------------------------------------------------------------------*/
+Assignment <. std::unique_ptr<DACEntry> entry .> =  (.wchar_t* name;
+                                                    Type* type = nullptr;
+                                                    Symbol* sym = nullptr;
+                                                    std::unique_ptr<DACEntry> expr; .)
+  Ident<name>                                       (.  sym = tab->Find(name).get();
+                                                    if (sym == nullptr) Err(L"Variable not defined");  .)
+
+ ":=" Expr                                          (.entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
+                                                            MIEC::DACFactory::createSymOperand(sym),
+                                                            MIEC::DACFactory::createDACOperand(expr)); 
+                                                    .)
+.
+
+
+
 
   Condition<Operand* op, Operand* op2>  (. OpKind opKind; .)
   = Expr<op>
@@ -80,32 +118,45 @@ PRODUCTIONS
     Expr<op2>                           (. dac.AddStat(opKind, op, op2) .)
   ].
 
+
+
+
   Expr<Operand* op, Operand* op2> = (. OpKind opKind; .)
     Term<op>
     { AddOp<opKind>
       Term<op2>                     (. dac.AddStat(opKind, op, op2) .)
     } .
 
+
+
+
   Term<Operand* op, Operand* op2> = (. OpKind opKind; .)
   Fact<op> 
   { MulOp<opKind>
-    Fact<op2>           (. dac.AddStat(opKind, op, op2) .)
+    Fact<op2>                       (. dac.AddStat(opKind, op, op2) .)
   } .
 
-  Fact<Operand* op> =   (. int value; wchar_t* name; Operand* op; Symbol* sym; .)
-  ( Ident<name>			(. sym = tab->Find(name); if(sym == nullptr){Err(L"Variable not defined");}
-                           op = new SymOperand(sym); .)
-  | Number<value>       (. sym = tab->Find(name); if(sym == nullptr){sym = tab->Add(value);}
-                           op = new SymOperand(sym); .)
+
+
+
+  Fact<Operand* op> =               (. int value; wchar_t* name; Operand* op; Symbol* sym; .)
+  ( Ident<name>			            (. sym = tab->Find(name); if(sym == nullptr){Err(L"Variable not defined");}
+                                       op = new SymOperand(sym); .)
+  | Number<value>                   (. sym = tab->Find(name); if(sym == nullptr){sym = tab->Add(value);}
+                                       op = new SymOperand(sym); .)
   | "(" Expr<op> ")" 
   ).
 
-  Relop =   "="
-          | "<="
-          | ">="
-          | "!="
-          | "<"
-          | ">" .
+
+
+
+  Relop < OpKind op > = "="         (.op = OpKind::eIsEqual; .)
+                      | "<="        (.op = OpKind::eIsLessEqual; .)
+                      | ">="        (.op = OpKind::eIsGreaterEqual; .)
+                      | "!="        (.op = OpKind::eIsNotEqual; .)
+                      | "<"         (.op = OpKind::eIsLess; .)
+                      | ">"         (.op = OpKind::eIsGreater; .)
+                      .
 
 /*------------------------------------------------------------------------*/
   Ident<wchar_t* &name>

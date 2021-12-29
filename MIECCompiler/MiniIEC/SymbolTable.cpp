@@ -54,4 +54,13 @@ void SymbolTable::Print(std::wostream &ost)
 			{ost << *it->GetName() << std::endl;});
 	ost << "---End SymbolTable---" << std::endl;
 }
+std::unique_ptr<Symbol> SymbolTable::Insert(std::unique_ptr<Symbol> symbol)
+{
+	if (Find(*symbol->GetName()) == nullptr)
+	{
+		mTable.push_back(std::move(symbol));
+		return symbol;
+	}
+	return nullptr;
+}
 }

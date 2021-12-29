@@ -12,9 +12,17 @@ namespace MIEC {
         return mSymbol;
     }
 
-    void SymOperand::Print(std::wostream& wost)
+    void SymOperand::Print(std::wostream& wost, size_t indent) const
     {
-        wost << "(" << mSymbol->GetName() << ")";
+        wost << std::wstring(indent, ' ') << "SymOperand:" << std::endl;
+        if (mSymbol) {
+            mSymbol->Print(wost, indent + 3);
+        }
+        else {
+            wost << std::wstring(indent + 3, ' ') << "<NULL Symbol>" << std::endl;
+        }
+
+        //wost << "(" << mSymbol->GetName() << ")";
     }
 
 }

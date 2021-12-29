@@ -27,8 +27,8 @@ std::shared_ptr<ConstIntSymbol> SymbolFactory::CreateConstInt(int value)
 			Kind::eInt, value);
 }
 
-std::shared_ptr<TypeSymbol> SymbolFactory::CreateTypeSym(std::wstring const &name)
+std::shared_ptr<TypeSymbol> SymbolFactory::CreateTypeSym(std::wstring const &name, Kind kind)
 {
-	return std::make_shared<TypeSymbol>(name, Kind::eUndef);
+	return std::make_shared<TypeSymbol>(name, kind);
 }
 }

@@ -16,6 +16,7 @@ class SymbolTable
 		std::shared_ptr<Symbol> Add(int const value);
 		std::shared_ptr<Symbol> Find(std::wstring const &name);
 		void Print(std::wostream &ost);
+		std::unique_ptr<Symbol> Insert(std::unique_ptr<Symbol> symbol);
 
 	private:
 		static std::unique_ptr<SymbolTable> mInstance;

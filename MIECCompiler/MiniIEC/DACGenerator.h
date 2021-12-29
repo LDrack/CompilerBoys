@@ -11,11 +11,10 @@
 namespace MIEC {
 	class DACGenerator : Object {
 	public:
-		DACGenerator();
+		//bool AddStat(OpKind op, Operand* first);
+		//bool AddStat(OpKind op, Operand* first, Operand* second);
 
-		bool AddStat(OpKind op, Operand* first);
-		bool AddStat(OpKind op, Operand* first, Operand* second);
-
+		void AddStat(std::unique_ptr<DACEntry> entry);
 
 		void Print(std::wostream &wost);
 	private:

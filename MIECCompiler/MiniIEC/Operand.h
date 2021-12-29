@@ -10,7 +10,7 @@ namespace MIEC {
 	public:
 		virtual ~Operand() = default;
 		OpClass getOpClass();
-		virtual void Print(std::wostream& wost) = 0;
+		virtual void Print(std::wostream& wost, size_t indent) const = 0;
 
 	protected:
 		Operand();

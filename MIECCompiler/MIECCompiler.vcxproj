@@ -102,10 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniIEC\ArrayType.h" />
-    <ClInclude Include="MiniIEC\BaseType.h" />
     <ClInclude Include="MiniIEC\BasicType.h" />
     <ClInclude Include="MiniIEC\ConstIntSymbol.h" />
     <ClInclude Include="MiniIEC\DACEntry.h" />
+    <ClInclude Include="MiniIEC\DACFactory.h" />
     <ClInclude Include="MiniIEC\DACGenerator.h" />
     <ClInclude Include="MiniIEC\DACOperand.h" />
     <ClInclude Include="MiniIEC\Kind.h" />

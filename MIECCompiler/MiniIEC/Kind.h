@@ -3,7 +3,8 @@
 namespace MIEC{
 	enum class Kind {
 		eUndef = 0, 
-		eInt = 1
+		eInt = 1,
+		eType = 2
 	};
 }
 

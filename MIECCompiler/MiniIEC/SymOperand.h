@@ -10,7 +10,7 @@ namespace MIEC {
 	public:
 		SymOperand(Symbol* sym);
 		Symbol* getSymbol();
-		void Print(std::wostream& wost);
+		void Print(std::wostream& wost, size_t indent) const override;
 
 	private:
 		Symbol* mSymbol;

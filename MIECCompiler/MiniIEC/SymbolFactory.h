@@ -14,7 +14,7 @@ class SymbolFactory
 
 		std::shared_ptr<VarSymbol> CreateVar(std::wstring const &name, Kind type);
 		std::shared_ptr<ConstIntSymbol> CreateConstInt(int value);
-		std::shared_ptr<TypeSymbol> CreateTypeSym(std::wstring const &name);
+		std::shared_ptr<TypeSymbol> CreateTypeSym(std::wstring const &name, Kind kind);
 
 	private:
 		SymbolFactory() = default;
