@@ -5,6 +5,7 @@
 #include "Object.h"
 #include "OpKind.h"
 #include "Operand.h"
+#include <memory>
 
 namespace MIEC {
 	class DACEntry : Object {
