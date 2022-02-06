@@ -85,26 +85,41 @@ Statements = Stat{ Stat } .
 
 Stat =                                          (. std::unique_ptr<DACEntry> entry; .)
 Assignment<entry>                               (. dac.AddStat(std::move(entry)) .)
-| "print" "(" Expr ")" ";"                      // TODO
-| Controlblock
+//| "print" "(" Expr ")" ";"                      // TODO
+//| Controlblock
 .
     
               
-Controlblock =
-"WHILE" Condition "DO" Statements "END"
-| "IF" Condition "THEN" Statements["ELSE" Statements] "END"
-.
+//Controlblock =
+//"WHILE" Condition "DO" Statements "END"
+//| "IF" Condition "THEN" Statements["ELSE" Statements] "END"
+//.
 
 
 /*------------------------------------------------------------------------*/
-Assignment <. std::unique_ptr<MIEC::DACEntry> &entry .> =  (.wchar_t* name;
+Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
+                                                    std::unique_ptr<MIEC::DACEntry> op, op2; .)
+ Expr<op>
+{ Relop<opKind>
+  Expr<op2>
+                                  (. op = MIEC::DACFactory::createDACEntry(opKind,
+                                             MIEC::DACFactory::createDACOperand(std::move(op)),
+                                             MIEC::DACFactory::createDACOperand(std::move(op2)));
+                                  .)
+}
+                                  (. entry = std::move(op) .)
+.
+
+
+
+Assignment<. std::unique_ptr<MIEC::DACEntry> &entry .> =  (.wchar_t* name;
                                                     Type* type = nullptr;
                                                     Symbol* sym = nullptr;
                                                     std::unique_ptr<MIEC::DACEntry> expr; .)
   Ident<name>                                       (.  sym = tab->Find(name).get();
                                                     if (sym == nullptr) Err(L"Variable not defined");  .)
 
- ":=" Expr<expr>                                    (.entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
+ ":=" Expr<expr>                                    (. entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
                                                             MIEC::DACFactory::createSymOperand(sym),
                                                             MIEC::DACFactory::createDACOperand(expr));
                                                     .)
@@ -112,35 +127,19 @@ Assignment <. std::unique_ptr<MIEC::DACEntry> &entry .> =  (.wchar_t* name;
 
 
 
-  Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
-                                                      std::unique_ptr<MIEC::DACEntry> op, op2; .)
-   Expr<op>
-  { Relop<opKind>
-    Expr<op2>
-                                    (. op = MIEC::DACFactory::createDACEntry(opKind,
-                                               MIEC::DACFactory::createDACOperand(std::move(op)),
-                                               MIEC::DACFactory::createDACOperand(std::move(op2)));
-                                    .)
-  }
-                                    (. entry = std::move(op) .)
-  .
-
-
-
-
-  Expr<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
-                                                        std::unique_ptr<MIEC::DACEntry> op, op2; .)
+Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> = (.OpKind opKind;
+                                                      std::unique_ptr<MIEC::DACEntry> op; 
+                                                      std::unique_ptr<MIEC::DACEntry> op2; .)
     Term<op>
     { AddOp<opKind>
       Term<op2>
-                                    (. op = MIEC::DACFactory::createDACEntry(opKind,
-                                               MIEC::DACFactory::createDACOperand(std::move(op)),
-                                               MIEC::DACFactory::createDACOperand(std::move(op2)));
-                                    .)
+                                                      (.op = MIEC::DACFactory::createDACEntry(opKind,
+                                                          MIEC::DACFactory::createDACOperand(std::move(op)),
+                                                          MIEC::DACFactory::createDACOperand(std::move(op2)));
+                                                        .)
     }
-                                    (. entry = std::move(op) .)
-  .
-
+                                                      (. entry = std::move(op) .)
+.
 
 
 
