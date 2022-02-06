@@ -4,6 +4,7 @@
 #include "OpKind.h"
 #include "DACGenerator.h"
 #include "DACEntry.h"
+#include "DACFactory.h"
 #include "Type.h"
 // #include <string>
 #include <charconv>
@@ -96,40 +97,39 @@ Controlblock =
 
 
 /*------------------------------------------------------------------------*/
-Assignment <. std::unique_ptr<DACEntry> &entry .> =  (.wchar_t* name;
+Assignment <. std::unique_ptr<MIEC::DACEntry> &entry .> =  (.wchar_t* name;
                                                     Type* type = nullptr;
                                                     Symbol* sym = nullptr;
-                                                    std::unique_ptr<DACEntry> expr; .)
+                                                    std::unique_ptr<MIEC::DACEntry> expr; .)
   Ident<name>                                       (.  sym = tab->Find(name).get();
                                                     if (sym == nullptr) Err(L"Variable not defined");  .)
 
  ":=" Expr<expr>                                    (.entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
                                                             MIEC::DACFactory::createSymOperand(sym),
-                                                            MIEC::DACFactory::createDACOperand(expr)); 
+                                                            MIEC::DACFactory::createDACOperand(expr));
                                                     .)
 .
 
 
 
-
-  Condition<. std::unique_ptr<DACEntry> &entry .> = (. OpKind opKind;
-                                                      std::unique_ptr<DACEntry> op, op2; .)
+  Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
+                                                      std::unique_ptr<MIEC::DACEntry> op, op2; .)
    Expr<op>
-  [ Relop<opKind>
+  { Relop<opKind>
     Expr<op2>
                                     (. op = MIEC::DACFactory::createDACEntry(opKind,
                                                MIEC::DACFactory::createDACOperand(std::move(op)),
                                                MIEC::DACFactory::createDACOperand(std::move(op2)));
                                     .)
-  ]
+  }
                                     (. entry = std::move(op) .)
   .
 
 
 
 
-  Expr<. std::unique_ptr<DACEntry> &entry .> = (. OpKind opKind;
-                                                 std::unique_ptr<DACEntry> op, op2; .)
+  Expr<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
+                                                        std::unique_ptr<MIEC::DACEntry> op, op2; .)
     Term<op>
     { AddOp<opKind>
       Term<op2>
@@ -145,7 +145,7 @@ Assignment <. std::unique_ptr<DACEntry> &entry .> =  (.wchar_t* name;
 
 
   Term<. std::unique_ptr<DACEntry> &entry .> = (. OpKind opKind;
-                                                 std::unique_ptr<Operand> op, op2; .)
+                                                 std::unique_ptr<MIEC::Operand> op, op2; .)
   Fact<op> 
   { MulOp<opKind>
     Fact<op2>
@@ -160,7 +160,7 @@ Assignment <. std::unique_ptr<DACEntry> &entry .> =  (.wchar_t* name;
 
 
 
-  Fact<. std::unique_ptr<Operand> &entry .> =               (. int value; wchar_t* name; std::unique_ptr<DACEntry> op; Symbol* sym; .)
+  Fact<. std::unique_ptr<MIEC::Operand> &entry .> =               (. int value; wchar_t* name; std::unique_ptr<MIEC::DACEntry> op; Symbol* sym; .)
   Ident<name>                       (. sym = tab->Find(name); if(sym == nullptr){Err(L"Variable not defined");}
                                        entry = new SymOperand(sym); .)
   | Number<value>                   (. sym = tab->Find(value); if(sym == nullptr){sym = tab->Add(value);}
