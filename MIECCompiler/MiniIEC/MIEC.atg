@@ -23,21 +23,22 @@ COMPILER MIEC
         errors->Error(la->line, la->col, msg);
     }
 
-    int // types
-      undef, integer;
+    // int // types
+    //   undef, Integer;
 
-    void InitDeclarations() { // it must exist
-        undef = 0; Integer = 1; // types
-    }
+    // void InitDeclarations() { // it must exist
+    //     undef = 0; Integer = 1; // types
+    // }
 
 
     const Type *getIntegerType() {
-        constexpr wchar_t* typeName = L"[Type]Integer";
-        Symbol *sym = tab->Find(typeName);
-        if (!sym || sym->GetType() != Kind::eType) {
-            sym = tab.Insert(fac->CreateTypeSym(typeName, Kind::eInt));
-        }
-        return sym->GetType();
+      std::wstring typeName = L"[Type]Integer";
+      std::shared_ptr<Symbol> sym = tab->Find(typeName);
+      if (!sym || sym->GetKind() != Kind::eType) {
+        std::shared_ptr<Symbol> typeSym = fac->CreateTypeSym(typeName, Kind::eInt);
+        sym = tab->Insert(std::move(typeSym));
+      }
+      return &(sym->GetKind());
     }
 
 

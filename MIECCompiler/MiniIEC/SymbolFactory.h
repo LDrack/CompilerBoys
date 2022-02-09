@@ -1,6 +1,7 @@
 #include "VarSymbol.h"
 #include "ConstIntSymbol.h"
 #include "TypeSymbol.h"
+#include "BasicType.h"
 #include <memory>
 
 #ifndef SYMBOLFACTORY_H
@@ -12,9 +13,9 @@ class SymbolFactory
 		static SymbolFactory& GetInstance();
 		static void Delete();
 
-		std::shared_ptr<VarSymbol> CreateVar(std::wstring const &name, Kind type);
-		std::shared_ptr<ConstIntSymbol> CreateConstInt(int value);
-		std::shared_ptr<TypeSymbol> CreateTypeSym(std::wstring const &name, Kind kind);
+		std::unique_ptr<VarSymbol> CreateVar(const Type *const type, std::wstring const &name);
+		std::unique_ptr<ConstIntSymbol> CreateConstInt(const Type* const type, std::wstring const& name, int const value);
+		std::unique_ptr<TypeSymbol> CreateTypeSym(const BasicTypeKind basicTypeKind, std::wstring const &name);
 
 	private:
 		SymbolFactory() = default;
@@ -22,6 +23,7 @@ class SymbolFactory
 		SymbolFactory& operator= (SymbolFactory const&) = delete;
 		static std::unique_ptr<SymbolFactory> mInstance;
 
+		size_t offset = 0;
 };
 
 }

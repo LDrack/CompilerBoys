@@ -1,12 +1,14 @@
-#ifndef _OPERAND__
-#define _OPERAND__
+#ifndef _OPERAND_H__
+#define _OPERAND_H__
 
-#include "Object.h"
-#include "OpClass.h"
 #include <iostream>
+#include "Object.h"
 
 namespace MIEC {
-	class Operand : Object {
+
+	enum class OpClass { eSymOp, eDACOp };
+
+	class Operand : public Object {
 	public:
 		virtual ~Operand() = default;
 		OpClass getOpClass();

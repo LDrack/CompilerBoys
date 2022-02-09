@@ -5,9 +5,10 @@ namespace MIEC {
 class ConstIntSymbol : public Symbol
 {
 public:
-	ConstIntSymbol(std::wstring const &name, Kind type, int value);
+	ConstIntSymbol(std::unique_ptr<Type>&& type, std::wstring const &name, int value);
 	int GetValue();
 	virtual void Print(std::wostream& out, size_t indent = 0) const override;
+	SymbolKind GetKind() const;
 private:
 	int mValue;
 };

@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include "Object.h"
 #include "Type.h"
 #include "Kind.h"
 
@@ -7,18 +8,23 @@
 #define SYMBOL_H
 namespace MIEC {
 
-class Symbol
-{
-	public:
-		Symbol() = delete;
-		std::wstring* GetName();
-		Kind GetType();
-		virtual void Print(std::wostream& out, size_t indent = 0) const = 0;
-	protected:
-		Symbol(std::wstring const &name, Kind type);
-		std::wstring mName;
-		Kind mType;
-};
+	enum class SymbolKind { Undefined, Variable, ConstInt, Type };
+
+	class Symbol : public Object
+	{
+		public:
+			Symbol(std::unique_ptr<Type> &&type, std::wstring const& name);
+			virtual ~Symbol() = default;
+
+			std::wstring GetName();
+			virtual SymbolKind GetKind() const = 0;
+			virtual void Print(std::wostream& out, size_t indent = 0) const = 0;
+			const Type* GetType() const;
+
+		protected:
+			const std::wstring mName;
+			const std::unique_ptr<Type> mType;
+	};
 
 }
 

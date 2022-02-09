@@ -2,6 +2,7 @@
 #include <memory>
 #include <list>
 #include <ostream>
+#include <map>
 
 #ifndef SYMBOLTABLE_H
 #define SYMBOLTABLE_H
@@ -12,11 +13,12 @@ class SymbolTable
 		static SymbolTable& GetInstance();
 		static void Delete();
 
-		std::shared_ptr<Symbol> Add(std::wstring const &name, Kind kind);
-		std::shared_ptr<Symbol> Add(int const value);
-		std::shared_ptr<Symbol> Find(std::wstring const &name);
+		//std::shared_ptr<Symbol> Add(std::wstring const &name, Kind kind);
+		//std::shared_ptr<Symbol> Add(int const value);
+		Symbol* Add(std::unique_ptr<Symbol> sym);
+		//std::shared_ptr<Symbol> Find(std::wstring const& name);
+		Symbol* Find(std::wstring const &name) const;
 		void Print(std::wostream &ost);
-		std::unique_ptr<Symbol> Insert(std::unique_ptr<Symbol> symbol);
 
 	private:
 		static std::unique_ptr<SymbolTable> mInstance;
@@ -24,9 +26,10 @@ class SymbolTable
 		SymbolTable() = default;
 		SymbolTable(SymbolTable const&) = delete;
 		SymbolTable& operator= (SymbolTable const&) = delete;
-		std::list<std::shared_ptr<Symbol>> mTable;
 
-		std::shared_ptr<Symbol> Insert(std::shared_ptr<Symbol> symbol);
+		//std::list<std::unique_ptr<Symbol>> mTable;
+		std::map<std::wstring, std::unique_ptr<Symbol>> mTable;
+
 };
 }
 

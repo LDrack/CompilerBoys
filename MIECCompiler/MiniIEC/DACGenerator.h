@@ -5,7 +5,6 @@
 #include <vector>
 #include "Object.h"
 #include "DACEntry.h"
-#include "OpClass.h"
 #include "Operand.h"
 
 namespace MIEC {

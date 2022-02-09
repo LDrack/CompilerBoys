@@ -5,7 +5,10 @@
 
 namespace MIEC {
 	class StructType : public Type {
-		size_t getSize() { return 4711; }
+		size_t getSize() const override { return 4711; }
+		TypeKind getTypeKind() const override { return TypeKind::StructType; };
+		std::unique_ptr<Type> getUniquePtr() const override { return std::make_unique<StructType>(*this);  };
+
 	};
 }
 
