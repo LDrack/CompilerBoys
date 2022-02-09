@@ -149,7 +149,7 @@ Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
  Expr<op>
 { Relop<opKind>
   Expr<op2>
-                                  (. op = MIEC::DACFactory::createDACEntry(opKind,
+                                  (. op = MIEC::DACFactory::createEntry(opKind,
                                              MIEC::DACFactory::createDACOperand(std::move(op)),
                                              MIEC::DACFactory::createDACOperand(std::move(op2)));
                                   .)
@@ -180,7 +180,7 @@ Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> = (.OpKind opKind;
     Term<op>
     { AddOp<opKind>
       Term<op2>
-                                                      (.op = MIEC::DACFactory::createDACEntry(opKind,
+                                                      (.op = MIEC::DACFactory::createEntry(opKind,
                                                           MIEC::DACFactory::createDACOperand(std::move(op)),
                                                           MIEC::DACFactory::createDACOperand(std::move(op2)));
                                                         .)
@@ -195,7 +195,7 @@ Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> = (.OpKind opKind;
   Fact<op> 
   { MulOp<opKind>
     Fact<op2>
-                                    (. op = MIEC::DACFactory::createDACEntry(opKind,
+                                    (. op = MIEC::DACFactory::createEntry(opKind,
                                                std::move(op),
                                                std::move(op2));
                                     .)
