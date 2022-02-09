@@ -10,8 +10,8 @@ namespace MIEC {
 	class DACFactory : public Object {
 	public:
         static std::unique_ptr<DACEntry> createEntry(const OpKind op,
-            std::unique_ptr<Operand>&& arg1 = nullptr,
-            std::unique_ptr<Operand>&& arg2 = nullptr,
+            std::unique_ptr<Operand>&& arg1,
+            std::unique_ptr<Operand>&& arg2,
             std::wstring label = L"") {
             return std::make_unique<DACEntry>(op, std::move(arg1), std::move(arg2), label);
         }
@@ -21,7 +21,7 @@ namespace MIEC {
             //return std::make_unique<Operand>(symbol);
         }
 
-        static std::unique_ptr<DACOperand> createDACOperand(std::unique_ptr<DACEntry> entry) {
+        static std::unique_ptr<DACOperand> createDACOperand(std::unique_ptr<DACEntry>&& entry) {
             return std::make_unique<DACOperand>(entry.get());
             //return std::make_unique<Operand>(entry.get());
         }

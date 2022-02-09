@@ -78,11 +78,13 @@ PRODUCTIONS
           "END" .
 
 /*--------------------BEGIN VAR_DECL DECLARATION----------------------------*/
-  VarDecl =                 (. wchar_t* name; Kind type; .)
+  VarDecl =                 (. wchar_t* name; Type* type; .)
     Ident<name> ":"
-    Types<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
-    {Ident<name> ":"
-    Types<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
+    Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){Err(L"Insert new var failed");} .)
+    {
+      Ident<name> ":"
+      Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){Err(L"Insert new var failed");} .)
+    }
   .
 /*--------------------END VAR_DECL DECLARATION------------------------------*/
 
@@ -91,7 +93,7 @@ PRODUCTIONS
 
 
   Stat =                    (. std::unique_ptr<DACEntry> entry; .)
-    InstructionLine<entry>  (. dac.AddStat(std::move(entry)) .)
+    InstructionLine<entry>  (. dac.AddStat(std::move(entry)); .)
     | Controlblock
   .
 
@@ -112,17 +114,17 @@ PRODUCTIONS
                                   (. std::unique_ptr<MIEC::DACEntry> cond; .)
     "WHILE" Condition<cond> "DO"
                                   (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
-                                      nullptr, nullptr, L"While: END")
+                                        nullptr, nullptr, L"While: END");
 
                                       auto startLoopLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
-                                      MIEC::DACFactory::createDACOperand(std::move(cond)),
-                                      MIEC::DACFactory::createSymOperand(std::move(endLabel)),
-                                      L"While: Jump to END");
+                                        MIEC::DACFactory::createDACOperand(std::move(cond)),
+                                        MIEC::DACFactory::createDACOperand(std::move(endLabel)),
+                                        L"While: Jump to END");
 
                                       auto endLoopLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
-                                      MIEC::DACFactory::createSymOperand(std::move(startLoopLabel)),
-                                      nullptr,
-                                      L"While: Jump to start");
+                                        MIEC::DACFactory::createDACOperand(std::move(startLoopLabel)),
+                                        nullptr,
+                                        L"While: Jump to start");
                                       dac.AddStat(std::move(startLoopLabel));
                                   .)
       [ Statements ]
@@ -150,7 +152,7 @@ PRODUCTIONS
 
                                     auto startIfLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
                                     MIEC::DACFactory::createDACOperand(std::move(cond)),
-                                    MIEC::DACFactory::createSymOperand(std::move(elseLabel)),
+                                    MIEC::DACFactory::createDACOperand(std::move(elseLabel)),
                                     L"If: Jump to else");
                                     dac.AddStat(std::move(startIfLabel));
                                 .)
@@ -292,8 +294,8 @@ PRODUCTIONS
                                     if (ret < 1) Err(L"parsing number failed"); .)
   .
 
-  Types<Kind &type> =            (. type = Kind::eUndef; .)
-    ( "Integer"                  (. type = Kind::eInt; .)
+  Types<Type* type> =           (. type = new BasicType(BasicTypeKind::None); .)
+    ( "Integer"                 (. type = new BasicType(BasicTypeKind::Integer); .)
     )
   .
 
