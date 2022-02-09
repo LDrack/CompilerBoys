@@ -80,29 +80,120 @@ PRODUCTIONS
   Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
           .
 
-/*------------------------------------------------------------------------*/
-Statements = Stat{ Stat } .
 
-Stat =                                          (. std::unique_ptr<DACEntry> entry; .)
-Assignment<entry>                               (. dac.AddStat(std::move(entry)) .)
-//| "print" "(" Expr ")" ";"                      // TODO
-//| Controlblock
+
+
+/*------------------------------------------------------------------------*/
+
+
+
+
+Statements = Stat { Stat } .
+
+
+Stat =                                                  (. std::unique_ptr<DACEntry> entry; .)
+InstructionLine<entry>                                  (. dac.AddStat(std::move(entry)) .)
+| Controlblock
 .
-    
-              
-//Controlblock =
-//"WHILE" Condition "DO" Statements "END"
-//| "IF" Condition "THEN" Statements["ELSE" Statements] "END"
-//.
+
+
+
+InstructionLine<. std::unique_ptr<MIEC::DACEntry> &entry .> = (
+  Assignment<entry>
+  | Print<entry>
+) ";"
+.
+
+
+
+Print<. std::unique_ptr<MIEC::DACEntry> &entry .> = 
+                                                      (. std::unique_ptr<MIEC::DACEntry> expr; .)
+  "print" "(" Expr<expr> ")" 
+                                                      (. entry = MIEC::DACFactory::createEntry(OpKind.ePrint, 
+                                                            MIEC::DACFactory::createDACOperand(std::move(expr))); .)
+.
+
+
+
+Controlblock =
+  WhileLoop |
+  ConditionalBlock .
+
+
+
+WhileLoop = 
+                                          (. std::unique_ptr<MIEC::DACEntry> cond; .)
+  "WHILE" Condition<cond> "DO"
+                                          (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                              nullptr, nullptr, L"While: END")
+
+                                              auto startLoopLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
+                                              MIEC::DACFactory::createDACOperand(std::move(cond)),
+                                              MIEC::DACFactory::createSymOperand(std::move(endLabel)),
+                                              L"While: Jump to END");
+
+                                              auto endLoopLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
+                                              MIEC::DACFactory::createSymOperand(std::move(startLoopLabel)),
+                                              nullptr,
+                                              L"While: Jump to start");
+                                              
+                                              dac.AddStat(std::move(startLoopLabel));
+                                          .)  
+    [ Statements ]  
+  "END"
+                                          (.  dac.AddStat(std::move(endLoopLabel));
+                                              dac.AddStat(std::move(endLabel));
+                                          .) 
+  .
+
+
+
+ConditionalBlock =
+                                          (.  std::unique_ptr<MIEC::DACEntry> cond; .)
+  "IF" Condition<cond> "THEN"
+                                          (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                              nullptr, nullptr, L"If: END")
+
+                                              auto elseLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                              nullptr, nullptr, L"If: else");
+
+                                              auto afterIfLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
+                                              MIEC::DACFactory::createDACOperand(std::move(endLabel)),
+                                              nullptr,
+                                              L"If: Jump over else to END");
+
+                                              auto startIfLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
+                                              MIEC::DACFactory::createDACOperand(std::move(cond)),
+                                              MIEC::DACFactory::createSymOperand(std::move(elseLabel)),
+                                              L"If: Jump to else");
+                                              
+                                              dac.AddStat(std::move(startIfLabel));
+                                          .)  
+    [ Statements ]
+                                          (.  dac.AddStat(std::move(afterIfLabel));
+                                              dac.AddStat(std::move(elseLabel));
+                                          .) 
+  [ "ELSE" 
+    [ Statements ]
+  ]
+  "END"
+                                          (.  dac.AddStat(std::move(endLabel));  .)
+  .
+
+
 
 
 /*------------------------------------------------------------------------*/
+
+
+
+
 Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
                                                     std::unique_ptr<MIEC::DACEntry> op, op2; .)
  Expr<op>
 { Relop<opKind>
   Expr<op2>
-                                  (. op = MIEC::DACFactory::createDACEntry(opKind,
+                                  (. op = MIEC::DACFactory::createEntry(opKind,
                                              MIEC::DACFactory::createDACOperand(std::move(op)),
                                              MIEC::DACFactory::createDACOperand(std::move(op2)));
                                   .)
@@ -133,7 +224,7 @@ Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> = (.OpKind opKind;
     Term<op>
     { AddOp<opKind>
       Term<op2>
-                                                      (.op = MIEC::DACFactory::createDACEntry(opKind,
+                                                      (.op = MIEC::DACFactory::createEntry(opKind,
                                                           MIEC::DACFactory::createDACOperand(std::move(op)),
                                                           MIEC::DACFactory::createDACOperand(std::move(op2)));
                                                         .)
@@ -148,7 +239,7 @@ Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> = (.OpKind opKind;
   Fact<op> 
   { MulOp<opKind>
     Fact<op2>
-                                    (. op = MIEC::DACFactory::createDACEntry(opKind,
+                                    (. op = MIEC::DACFactory::createEntry(opKind,
                                                std::move(op),
                                                std::move(op2));
                                     .)
