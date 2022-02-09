@@ -2,11 +2,8 @@
 #define DAC_ENTRY_FAC_H
 
 #include "Object.h"
-#include "DACEntry.h"
-#include "Operand.h"
 #include "DACOperand.h"
 #include "SymOperand.h"
-#include "DACOperand.h"
 
 namespace MIEC {
 
@@ -16,10 +13,10 @@ namespace MIEC {
             std::unique_ptr<Operand>&& arg1 = nullptr,
             std::unique_ptr<Operand>&& arg2 = nullptr,
             std::wstring label = L"") {
-            return std::make_unique<DACEntry>(op, std::move(arg1), std::move(arg2));
+            return std::make_unique<DACEntry>(op, std::move(arg1), std::move(arg2), label);
         }
 
-        static std::unique_ptr<SymOperand> createSymOperand(const Symbol* symbol) {
+        static std::unique_ptr<SymOperand> createSymOperand(Symbol* symbol) {
             return std::make_unique<SymOperand>(symbol);
             //return std::make_unique<Operand>(symbol);
         }

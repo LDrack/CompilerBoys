@@ -13,14 +13,14 @@ namespace MIEC {
 
 	void DACGenerator::AddStat(std::unique_ptr<DACEntry> entry)
 	{
-		mEntries.emplace_back(*entry);
+		mEntries.emplace_back(std::move(entry));
 	}
 
 	void DACGenerator::Print(std::wostream& wost)
 	{
 		wost << "--- DAC ---" << std::endl;
 		for (auto & elem : mEntries) {
-			elem.Print(wost, 3);
+			elem->Print(wost, 3);
 		}
 	}
 }

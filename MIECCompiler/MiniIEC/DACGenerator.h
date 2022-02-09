@@ -17,7 +17,7 @@ namespace MIEC {
 
 		void Print(std::wostream &wost);
 	private:
-		std::vector<DACEntry> mEntries;
+		std::vector<std::unique_ptr<DACEntry>> mEntries;
 	};
 
 }

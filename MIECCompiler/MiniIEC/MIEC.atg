@@ -3,7 +3,6 @@
 #include "Kind.h"
 #include "OpKind.h"
 #include "DACGenerator.h"
-#include "DACEntry.h"
 #include "DACFactory.h"
 #include "Type.h"
 // #include <string>
@@ -33,14 +32,14 @@ COMPILER MIEC
     // }
 
 
-    const Type *getIntegerType() {
+    const Type* getIntegerType() {
       std::wstring typeName = L"[Type]Integer";
-      std::shared_ptr<Symbol> sym = tab->Find(typeName);
-      if (!sym || sym->GetKind() != Kind::eType) {
-        std::shared_ptr<Symbol> typeSym = fac->CreateTypeSym(typeName, Kind::eInt);
-        sym = tab->Insert(std::move(typeSym));
+      MIEC::Symbol* sym = tab->Find(typeName);
+      if (!sym || sym->GetKind() != SymbolKind::Type) {
+        std::unique_ptr<MIEC::TypeSymbol> typeSym = fac->CreateTypeSym(BasicTypeKind::Integer, typeName);
+        sym = tab->Add(std::move(typeSym));
       }
-      return &(sym->GetKind());
+      return (sym->GetType());
     }
 
 /*--------------------END FUNCTION DECLARATION------------------------------*/
@@ -81,9 +80,9 @@ PRODUCTIONS
 /*--------------------BEGIN VAR_DECL DECLARATION----------------------------*/
   VarDecl =                 (. wchar_t* name; Kind type; .)
     Ident<name> ":"
-    Type<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
+    Types<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
     {Ident<name> ":"
-    Type<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
+    Types<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
   .
 /*--------------------END VAR_DECL DECLARATION------------------------------*/
 
@@ -207,7 +206,7 @@ PRODUCTIONS
 
     ":=" Expr<expr>     (.  entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
                             MIEC::DACFactory::createSymOperand(sym),
-                            MIEC::DACFactory::createDACOperand(expr));
+                            MIEC::DACFactory::createDACOperand(std::move(expr)));
                         .)
 .
 
@@ -293,7 +292,7 @@ PRODUCTIONS
                                     if (ret < 1) Err(L"parsing number failed"); .)
   .
 
-  Type<Kind &type> =            (. type = Kind::eUndef; .)
+  Types<Kind &type> =            (. type = Kind::eUndef; .)
     ( "Integer"                  (. type = Kind::eInt; .)
     )
   .

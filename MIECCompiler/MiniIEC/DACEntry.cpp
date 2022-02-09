@@ -2,8 +2,8 @@
 
 namespace MIEC {
     DACEntry::DACEntry(OpKind op, std::unique_ptr<Operand> first,
-        std::unique_ptr <Operand> second, int nr, std::wstring label) :
-        mOp(op), mFirst(std::move(first)), mSecond(std::move(second)), mNr(nr), mLabel(label)
+        std::unique_ptr <Operand> second, std::wstring label) :
+        mOp(op), mFirst(std::move(first)), mSecond(std::move(second)),  mLabel(label)
     {
     }
 

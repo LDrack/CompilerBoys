@@ -14,7 +14,6 @@ namespace MIEC {
 			DACEntry(OpKind op,
 					std::unique_ptr<Operand> first,
 					std::unique_ptr <Operand> second,
-					int nr,
 					std::wstring label = 0);
 
 			//Operand* getFirst();
