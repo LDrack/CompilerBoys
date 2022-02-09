@@ -81,19 +81,66 @@ PRODUCTIONS
           .
 
 /*------------------------------------------------------------------------*/
-Statements = Stat{ Stat } .
+
+
+
+
+Statements = Stat { Stat } .
 
 Stat =                                          (. std::unique_ptr<DACEntry> entry; .)
-Assignment<entry>                               (. dac.AddStat(std::move(entry)) .)
-//| "print" "(" Expr ")" ";"                      // TODO
-//| Controlblock
+Assignment<entry> ";"                           (. dac.AddStat(std::move(entry)) .)
+| Print<entry> ";"                              (. dac.AddStat(std::move(entry)) .)
+| Controlblock
 .
-    
-              
-//Controlblock =
-//"WHILE" Condition "DO" Statements "END"
-//| "IF" Condition "THEN" Statements["ELSE" Statements] "END"
-//.
+
+
+
+Print<. std::unique_ptr<MIEC::DACEntry> &entry .> = 
+                                                      (. std::unique_ptr<MIEC::DACEntry> expr; .)
+  "print" "(" Expr<expr> ")" 
+                                                      (. entry = MIEC::DACFactory::createEntry(OpKind.ePrint, 
+                                                            MIEC::DACFactory::createDACOperand(std::move(expr))); .)
+.
+
+
+
+Controlblock =
+  WhileLoop |
+  ConditionalBlock .
+
+
+
+WhileLoop = 
+
+  "WHILE" Condition<cond> "DO"
+  
+    [ Statements ]
+  
+  "END"
+  
+  .
+
+
+
+ConditionalBlock =
+
+  "IF" Condition<cond> "THEN"
+  
+    [ Statements ]
+  
+  ["ELSE" 
+    [ Statements ]
+  ]
+  
+  "END"
+
+  .
+
+
+
+
+
+
 
 
 /*------------------------------------------------------------------------*/
