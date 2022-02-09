@@ -13,12 +13,14 @@
 
 COMPILER MIEC
 
+/*--------------------BEGIN VARIABLE DECLARATION----------------------------*/
     SymbolTable   *tab;
     SymbolFactory *fac;
     DACGenerator dac;
-    
     // CodeGenerator *gen;
+/*--------------------END VARIABLE DECLARATION------------------------------*/
 
+/*--------------------BEGIN FUNCTION DECLARATION----------------------------*/
     void Err(wchar_t* msg) {
         errors->Error(la->line, la->col, msg);
     }
@@ -41,8 +43,9 @@ COMPILER MIEC
       return &(sym->GetKind());
     }
 
+/*--------------------END FUNCTION DECLARATION------------------------------*/
 
-  
+/*--------------------BEGIN ALPHABET DECLARATION----------------------------*/
 CHARACTERS
   letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
   digit = "0123456789".
@@ -50,20 +53,22 @@ CHARACTERS
   lf  = '\n'.
   tab = '\t'.
 
-/*--------------------------------------------------------------------------*/
 TOKENS
   ident  = letter {letter | digit}.
   number = digit {digit}.
-  
-    
-COMMENTS
-  FROM "(*" TO "*)" NESTED
-
 
 IGNORE cr + lf + tab
 
+COMMENTS
+  FROM "(*" TO "*)" NESTED
 
-/*--------------------------------------------------------------------------*/
+/*--------------------END ALPHABET DECLARATION------------------------------*/
+
+
+
+
+
+/*--------------------BEGIN PRODUCTIONS DECLARATION-------------------------*/
 PRODUCTIONS
   MIEC =  "PROGRAM" ident
           "BEGIN_VAR"
@@ -73,233 +78,229 @@ PRODUCTIONS
           Statements
           "END" .
 
-
+/*--------------------BEGIN VAR_DECL DECLARATION----------------------------*/
   VarDecl =                 (. wchar_t* name; Kind type; .)
-  Ident<name> ":"
-  Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
-  {Ident<name> ":"
-  Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
-          .
-
-
-
-
-/*------------------------------------------------------------------------*/
-
-
-
-
-Statements = Stat { Stat } .
-
-
-Stat =                                                  (. std::unique_ptr<DACEntry> entry; .)
-InstructionLine<entry>                                  (. dac.AddStat(std::move(entry)) .)
-| Controlblock
-.
-
-
-
-InstructionLine<. std::unique_ptr<MIEC::DACEntry> &entry .> = (
-  Assignment<entry>
-  | Print<entry>
-) ";"
-.
-
-
-
-Print<. std::unique_ptr<MIEC::DACEntry> &entry .> = 
-                                                      (. std::unique_ptr<MIEC::DACEntry> expr; .)
-  "print" "(" Expr<expr> ")" 
-                                                      (. entry = MIEC::DACFactory::createEntry(OpKind.ePrint, 
-                                                            MIEC::DACFactory::createDACOperand(std::move(expr))); .)
-.
-
-
-
-Controlblock =
-  WhileLoop |
-  ConditionalBlock .
-
-
-
-WhileLoop = 
-                                          (. std::unique_ptr<MIEC::DACEntry> cond; .)
-  "WHILE" Condition<cond> "DO"
-                                          (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
-                                              nullptr, nullptr, L"While: END")
-
-                                              auto startLoopLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
-                                              MIEC::DACFactory::createDACOperand(std::move(cond)),
-                                              MIEC::DACFactory::createSymOperand(std::move(endLabel)),
-                                              L"While: Jump to END");
-
-                                              auto endLoopLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
-                                              MIEC::DACFactory::createSymOperand(std::move(startLoopLabel)),
-                                              nullptr,
-                                              L"While: Jump to start");
-                                              
-                                              dac.AddStat(std::move(startLoopLabel));
-                                          .)  
-    [ Statements ]  
-  "END"
-                                          (.  dac.AddStat(std::move(endLoopLabel));
-                                              dac.AddStat(std::move(endLabel));
-                                          .) 
+    Ident<name> ":"
+    Type<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)
+    {Ident<name> ":"
+    Type<type> ";"          (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
   .
+/*--------------------END VAR_DECL DECLARATION------------------------------*/
+
+/*--------------------BEGIN STATEMENT DECLARATION---------------------------*/
+  Statements = Stat { Stat } .
 
 
-
-ConditionalBlock =
-                                          (.  std::unique_ptr<MIEC::DACEntry> cond; .)
-  "IF" Condition<cond> "THEN"
-                                          (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
-                                              nullptr, nullptr, L"If: END")
-
-                                              auto elseLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
-                                              nullptr, nullptr, L"If: else");
-
-                                              auto afterIfLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
-                                              MIEC::DACFactory::createDACOperand(std::move(endLabel)),
-                                              nullptr,
-                                              L"If: Jump over else to END");
-
-                                              auto startIfLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
-                                              MIEC::DACFactory::createDACOperand(std::move(cond)),
-                                              MIEC::DACFactory::createSymOperand(std::move(elseLabel)),
-                                              L"If: Jump to else");
-                                              
-                                              dac.AddStat(std::move(startIfLabel));
-                                          .)  
-    [ Statements ]
-                                          (.  dac.AddStat(std::move(afterIfLabel));
-                                              dac.AddStat(std::move(elseLabel));
-                                          .) 
-  [ "ELSE" 
-    [ Statements ]
-  ]
-  "END"
-                                          (.  dac.AddStat(std::move(endLabel));  .)
+  Stat =                    (. std::unique_ptr<DACEntry> entry; .)
+    InstructionLine<entry>  (. dac.AddStat(std::move(entry)) .)
+    | Controlblock
   .
 
 
 
 
-/*------------------------------------------------------------------------*/
+/*--------------------END STATEMENT DECLARATION---------------------------*/
+
+/*--------------------BEGIN CONTROL_BLOCK DECLARATION---------------------*/
+  Controlblock =
+    WhileLoop |
+    ConditionalBlock 
+  .
 
 
 
+  WhileLoop =
+                                  (. std::unique_ptr<MIEC::DACEntry> cond; .)
+    "WHILE" Condition<cond> "DO"
+                                  (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                      nullptr, nullptr, L"While: END")
 
-Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
-                                                    std::unique_ptr<MIEC::DACEntry> op, op2; .)
- Expr<op>
-{ Relop<opKind>
-  Expr<op2>
-                                  (. op = MIEC::DACFactory::createEntry(opKind,
-                                             MIEC::DACFactory::createDACOperand(std::move(op)),
-                                             MIEC::DACFactory::createDACOperand(std::move(op2)));
+                                      auto startLoopLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
+                                      MIEC::DACFactory::createDACOperand(std::move(cond)),
+                                      MIEC::DACFactory::createSymOperand(std::move(endLabel)),
+                                      L"While: Jump to END");
+
+                                      auto endLoopLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
+                                      MIEC::DACFactory::createSymOperand(std::move(startLoopLabel)),
+                                      nullptr,
+                                      L"While: Jump to start");
+                                      dac.AddStat(std::move(startLoopLabel));
                                   .)
-}
-                                  (. entry = std::move(op) .)
-.
+      [ Statements ]
+    "END"
+                                  (.  dac.AddStat(std::move(endLoopLabel));
+                                      dac.AddStat(std::move(endLabel));
+                                  .)
+  .
 
 
 
-Assignment<. std::unique_ptr<MIEC::DACEntry> &entry .> =  (.wchar_t* name;
-                                                    Type* type = nullptr;
-                                                    Symbol* sym = nullptr;
-                                                    std::unique_ptr<MIEC::DACEntry> expr; .)
-  Ident<name>                                       (.  sym = tab->Find(name).get();
-                                                    if (sym == nullptr) Err(L"Variable not defined");  .)
+  ConditionalBlock =
+                                (.  std::unique_ptr<MIEC::DACEntry> cond; .)
+    "IF" Condition<cond> "THEN"
+                                (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                    nullptr, nullptr, L"If: END")
 
- ":=" Expr<expr>                                    (. entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
-                                                            MIEC::DACFactory::createSymOperand(sym),
-                                                            MIEC::DACFactory::createDACOperand(expr));
-                                                    .)
-.
+                                    auto elseLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                    nullptr, nullptr, L"If: else");
+
+                                    auto afterIfLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
+                                    MIEC::DACFactory::createDACOperand(std::move(endLabel)),
+                                    nullptr,
+                                    L"If: Jump over else to END");
+
+                                    auto startIfLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
+                                    MIEC::DACFactory::createDACOperand(std::move(cond)),
+                                    MIEC::DACFactory::createSymOperand(std::move(elseLabel)),
+                                    L"If: Jump to else");
+                                    dac.AddStat(std::move(startIfLabel));
+                                .)
+      [ Statements ]
+                                (.  dac.AddStat(std::move(afterIfLabel));
+                                    dac.AddStat(std::move(elseLabel));
+                                .)
+    [ "ELSE"
+      [ Statements ]
+    ]
+    "END"
+                                (.  dac.AddStat(std::move(endLabel));  .)
+  .
 
 
-
-Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> = (.OpKind opKind;
-                                                      std::unique_ptr<MIEC::DACEntry> op; 
-                                                      std::unique_ptr<MIEC::DACEntry> op2; .)
-    Term<op>
-    { AddOp<opKind>
-      Term<op2>
-                                                      (.op = MIEC::DACFactory::createEntry(opKind,
-                                                          MIEC::DACFactory::createDACOperand(std::move(op)),
-                                                          MIEC::DACFactory::createDACOperand(std::move(op2)));
-                                                        .)
+  Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> =
+                  (.  OpKind opKind;
+                      std::unique_ptr<MIEC::DACEntry> op, op2; .)
+  Expr<op>
+    { Relop<opKind>
+      Expr<op2>
+                  (.  op = MIEC::DACFactory::createEntry(opKind,
+                      MIEC::DACFactory::createDACOperand(std::move(op)),
+                      MIEC::DACFactory::createDACOperand(std::move(op2)));
+                  .)
     }
-                                                      (. entry = std::move(op) .)
+                  (. entry = std::move(op) .)
+  .
+
+/*--------------------END CONTROL_BLOCK DECLARATION-----------------------*/
+/*--------------------BEGIN INSTRUCTION_LINE DECLARATION------------------*/
+
+  InstructionLine<. std::unique_ptr<MIEC::DACEntry> &entry .> =
+    ( Assignment<entry> | Print<entry> ) ";"
+  .
+
+
+
+  Print<. std::unique_ptr<MIEC::DACEntry> &entry .> =
+                                (. std::unique_ptr<MIEC::DACEntry> expr; .)
+    "print" "(" Expr<expr> ")"
+                                (. entry = MIEC::DACFactory::createEntry(OpKind.ePrint,
+                                   MIEC::DACFactory::createDACOperand(std::move(expr))); .)
+  .
+
+  Assignment<. std::unique_ptr<MIEC::DACEntry> &entry .> =
+                        (.  wchar_t* name;
+                            Type* type = nullptr;
+                            Symbol* sym = nullptr;
+                            std::unique_ptr<MIEC::DACEntry> expr; .)
+    Ident<name>         (.  sym = tab->Find(name).get();
+                            if (sym == nullptr) Err(L"Variable not defined");  .)
+
+    ":=" Expr<expr>     (.  entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
+                            MIEC::DACFactory::createSymOperand(sym),
+                            MIEC::DACFactory::createDACOperand(expr));
+                        .)
 .
 
 
 
-  Term<. std::unique_ptr<DACEntry> &entry .> = (. OpKind opKind;
-                                                 std::unique_ptr<MIEC::Operand> op, op2; .)
+  Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> =
+                        (.  OpKind opKind;
+                            std::unique_ptr<MIEC::DACEntry> op; 
+                            std::unique_ptr<MIEC::DACEntry> op2; .)
+    Term<op>
+    {  AddOp<opKind>
+       Term<op2>
+                        (.  op = MIEC::DACFactory::createEntry(opKind,
+                            MIEC::DACFactory::createDACOperand(std::move(op)),
+                            MIEC::DACFactory::createDACOperand(std::move(op2)));
+                        .)
+    }                   (.  entry = std::move(op); .)
+  .
+
+
+
+  Term<. std::unique_ptr<DACEntry> &entry .> = 
+                      (.  OpKind opKind;
+                          std::unique_ptr<MIEC::Operand> op, op2; .)
   Fact<op> 
   { MulOp<opKind>
     Fact<op2>
-                                    (. op = MIEC::DACFactory::createEntry(opKind,
-                                               std::move(op),
-                                               std::move(op2));
-                                    .)
+                      (.  op = MIEC::DACFactory::createEntry(opKind,
+                          std::move(op),
+                          std::move(op2));
+                      .)
   }
-                                    (. entry = std::move(op) .)
+                      (. entry = std::move(op) .)
   .
 
 
 
 
-  Fact<. std::unique_ptr<MIEC::Operand> &entry .> =               (. int value; wchar_t* name; std::unique_ptr<MIEC::DACEntry> op; Symbol* sym; .)
-  Ident<name>                       (. sym = tab->Find(name); if(sym == nullptr){Err(L"Variable not defined");}
-                                       entry = new SymOperand(sym); .)
-  | Number<value>                   (. sym = tab->Find(value); if(sym == nullptr){sym = tab->Add(value);}
-                                       entry = new SymOperand(sym); .)
-  | "(" Expr<op> ")"                (. entry = MIEC::DACFactory::createDACOperand(std::move(op)); .)
+  Fact<. std::unique_ptr<MIEC::Operand> &entry .> =
+                        (.  int value; wchar_t* name;
+                            std::unique_ptr<MIEC::DACEntry> op;
+                            Symbol* sym; .)
+    Ident<name>         (.  sym = tab->Find(name);
+                            if(sym == nullptr)
+                              Err(L"Variable not defined");
+                            entry = new SymOperand(sym); .)
+    | Number<value>     (.  sym = tab->Find(value);
+                            if(sym == nullptr)
+                              sym = tab->Add(value);
+                            entry = new SymOperand(sym); .)
+    | "(" Expr<op> ")"  (.  entry = MIEC::DACFactory::createDACOperand(std::move(op)); .)
   .
 
+/*--------------------END INSTRUCTION_LINE DECLARATION--------------------*/
 
 
+/*--------------------BEGIN OPERATION DECLARATION-------------------------*/
 
-  Relop < OpKind op > = "="         (.op = OpKind::eIsEqual; .)
-                      | "<="        (.op = OpKind::eIsLessEqual; .)
-                      | ">="        (.op = OpKind::eIsGreaterEqual; .)
-                      | "!="        (.op = OpKind::eIsNotEqual; .)
-                      | "<"         (.op = OpKind::eIsLess; .)
-                      | ">"         (.op = OpKind::eIsGreater; .)
+
+  Relop < OpKind op > = "="     (.op = OpKind::eIsEqual; .)
+                      | "<="    (.op = OpKind::eIsLessEqual; .)
+                      | ">="    (.op = OpKind::eIsGreaterEqual; .)
+                      | "!="    (.op = OpKind::eIsNotEqual; .)
+                      | "<"     (.op = OpKind::eIsLess; .)
+                      | ">"     (.op = OpKind::eIsGreater; .)
                       .
+  MulOp<OpKind op> =
+    ( '*'                       (. op = OpKind::eMultiply; .)
+    | '/'                       (. op = OpKind::eDivide; .)
+    ).
 
-/*------------------------------------------------------------------------*/
-  Ident<wchar_t* &name>
-= ident                  (. name = coco_string_create(t->val); .)
-.
+  AddOp<OpKind op> =
+    ( '+'                       (. op = OpKind::eAdd; .)
+    | '-'                       (. op = OpKind::eSubtract; .)
+    ).
+/*--------------------END OPERATION DECLARATION---------------------------*/
 
-/*------------------------------------------------------------------------*/
-Number<int& value> = 
-number                    (. int ret = swscanf(t->val, L"%d", &value);
-                             if (ret < 1) Err(L"parsing number failed"); .)
-.
+/*--------------------BEGIN TYPE DECLARATION------------------------------*/
+  Ident<wchar_t* &name> = ident (.  name = coco_string_create(t->val); .)
+  .
 
-/*------------------------------------------------------------------------*/
-Type<Kind &type>
-=                        (. type = Kind::eUndef; .)
- ( "Integer"             (. type = Kind::eInt; .)
- ).
+  Number<int& value> = number   (.  int ret = swscanf(t->val, L"%d", &value);
+                                    if (ret < 1) Err(L"parsing number failed"); .)
+  .
 
-/*------------------------------------------------------------------------*/
-MulOp<OpKind op>
-=
-  ( '*'                  (. op = OpKind::eMultiply; .)
-  | '/'                  (. op = OpKind::eDivide; .)
-  ).
-/*------------------------------------------------------------------------*/
-AddOp<OpKind op>
-=
-  ( '+'	                 (. op = OpKind::eAdd; .)
-  | '-'                  (. op = OpKind::eSubtract; .)
-  ).
+  Type<Kind &type> =            (. type = Kind::eUndef; .)
+    ( "Integer"                  (. type = Kind::eInt; .)
+    )
+  .
 
+/*--------------------END TYPE DECLARATION--------------------------------*/
+
+/*--------------------END PRODUCTIONS DECLARATION---------------------------*/
 /* MIEC = . */
 
 
