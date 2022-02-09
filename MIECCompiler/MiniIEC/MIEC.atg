@@ -80,6 +80,9 @@ PRODUCTIONS
   Type<type> ";"            (. if(!tab->Add( name, type)){Err(L"Insert new var failed");} .)}
           .
 
+
+
+
 /*------------------------------------------------------------------------*/
 
 
@@ -87,10 +90,18 @@ PRODUCTIONS
 
 Statements = Stat { Stat } .
 
-Stat =                                          (. std::unique_ptr<DACEntry> entry; .)
-Assignment<entry> ";"                           (. dac.AddStat(std::move(entry)) .)
-| Print<entry> ";"                              (. dac.AddStat(std::move(entry)) .)
+
+Stat =                                                  (. std::unique_ptr<DACEntry> entry; .)
+InstructionLine<entry>                                  (. dac.AddStat(std::move(entry)) .)
 | Controlblock
+.
+
+
+
+InstructionLine<. std::unique_ptr<MIEC::DACEntry> &entry .> = (
+  Assignment<entry>
+  | Print<entry>
+) ";"
 .
 
 
@@ -111,39 +122,72 @@ Controlblock =
 
 
 WhileLoop = 
-
+                                          (. std::unique_ptr<MIEC::DACEntry> cond; .)
   "WHILE" Condition<cond> "DO"
-  
-    [ Statements ]
-  
+                                          (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                              nullptr, nullptr, L"While: END")
+
+                                              auto startLoopLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
+                                              MIEC::DACFactory::createDACOperand(std::move(cond)),
+                                              MIEC::DACFactory::createSymOperand(std::move(endLabel)),
+                                              L"While: Jump to END");
+
+                                              auto endLoopLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
+                                              MIEC::DACFactory::createSymOperand(std::move(startLoopLabel)),
+                                              nullptr,
+                                              L"While: Jump to start");
+                                              
+                                              dac.AddStat(std::move(startLoopLabel));
+                                          .)  
+    [ Statements ]  
   "END"
-  
+                                          (.  dac.AddStat(std::move(endLoopLabel));
+                                              dac.AddStat(std::move(endLabel));
+                                          .) 
   .
 
 
 
 ConditionalBlock =
-
+                                          (.  std::unique_ptr<MIEC::DACEntry> cond; .)
   "IF" Condition<cond> "THEN"
-  
+                                          (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                              nullptr, nullptr, L"If: END")
+
+                                              auto elseLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
+                                              nullptr, nullptr, L"If: else");
+
+                                              auto afterIfLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
+                                              MIEC::DACFactory::createDACOperand(std::move(endLabel)),
+                                              nullptr,
+                                              L"If: Jump over else to END");
+
+                                              auto startIfLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
+                                              MIEC::DACFactory::createDACOperand(std::move(cond)),
+                                              MIEC::DACFactory::createSymOperand(std::move(elseLabel)),
+                                              L"If: Jump to else");
+                                              
+                                              dac.AddStat(std::move(startIfLabel));
+                                          .)  
     [ Statements ]
-  
-  ["ELSE" 
+                                          (.  dac.AddStat(std::move(afterIfLabel));
+                                              dac.AddStat(std::move(elseLabel));
+                                          .) 
+  [ "ELSE" 
     [ Statements ]
   ]
-  
   "END"
-
+                                          (.  dac.AddStat(std::move(endLabel));  .)
   .
 
 
 
 
-
-
-
-
 /*------------------------------------------------------------------------*/
+
+
+
+
 Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> = (. OpKind opKind;
                                                     std::unique_ptr<MIEC::DACEntry> op, op2; .)
  Expr<op>
