@@ -57,10 +57,10 @@ TOKENS
   ident  = letter {letter | digit}.
   number = digit {digit}.
 
-IGNORE cr + lf + tab
-
 COMMENTS
   FROM "(*" TO "*)" NESTED
+
+IGNORE cr + lf + tab
 
 /*--------------------END ALPHABET DECLARATION------------------------------*/
 
