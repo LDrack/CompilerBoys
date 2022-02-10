@@ -6,7 +6,7 @@
 #include "DACEntry.h"
 
 namespace MIEC {
-	class DACOperand : Operand {
+	class DACOperand : public Operand {
 	public:
 		DACOperand(DACEntry* entry);
 		DACEntry* getDACEntry();

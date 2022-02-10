@@ -5,8 +5,8 @@
 #include "DACGenerator.h"
 #include "DACFactory.h"
 #include "Type.h"
-// #include <string>
 #include <charconv>
+
 // #include <system_error>
 
 
@@ -179,7 +179,7 @@ PRODUCTIONS
                       MIEC::DACFactory::createDACOperand(std::move(op2)));
                   .)
     }
-                  (. entry = std::move(op) .)
+                  (. entry = std::move(op); .)
   .
 
 /*--------------------END CONTROL_BLOCK DECLARATION-----------------------*/
@@ -216,50 +216,57 @@ PRODUCTIONS
 
   Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> =
                         (.  OpKind opKind;
-                            std::unique_ptr<MIEC::DACEntry> op; 
-                            std::unique_ptr<MIEC::DACEntry> op2; .)
-    Term<op>
+                            std::unique_ptr<MIEC::DACEntry> arg1, arg2 .)
+    Term<arg1>
     {  AddOp<opKind>
-       Term<op2>
-                        (.  op = MIEC::DACFactory::createEntry(opKind,
-                            MIEC::DACFactory::createDACOperand(std::move(op)),
-                            MIEC::DACFactory::createDACOperand(std::move(op2)));
+       Term<arg2>
+                        (.  arg1 = MIEC::DACFactory::createEntry(opKind,
+                            MIEC::DACFactory::createDACOperand(std::move(arg1)),
+                            MIEC::DACFactory::createDACOperand(std::move(arg2)));
                         .)
-    }                   (.  entry = std::move(op); .)
+    }                   (.  entry = std::move(arg1); .)
   .
 
 
 
-  Term<. std::unique_ptr<DACEntry> &entry .> = 
+  Term<. std::unique_ptr<MIEC::DACEntry> &entry .> = 
                       (.  OpKind opKind;
-                          std::unique_ptr<MIEC::Operand> op, op2; .)
-  Fact<op> 
+                          std::unique_ptr<MIEC::DACEntry> arg1, arg2; .)
+  Fact<arg1> 
   { MulOp<opKind>
-    Fact<op2>
-                      (.  op = MIEC::DACFactory::createEntry(opKind,
-                          std::move(op),
-                          std::move(op2));
+    Fact<arg2>
+                      (.  arg1 = MIEC::DACFactory::createEntry(opKind,
+                          std::move(arg1),
+                          std::move(arg2));
                       .)
   }
-                      (. entry = std::move(op) .)
+                      (. entry = std::move(arg1); .)
   .
 
 
 
 
-  Fact<. std::unique_ptr<MIEC::Operand> &entry .> =
-                        (.  int value; wchar_t* name;
-                            std::unique_ptr<MIEC::DACEntry> op;
+  Fact<. std::unique_ptr<MIEC::DACEntry> &entry .> =
+                        (.  wchar_t* name;
                             Symbol* sym; .)
+
     Ident<name>         (.  sym = tab->Find(name);
-                            if(sym == nullptr)
-                              Err(L"Variable not defined");
-                            entry = new SymOperand(sym); .)
-    | Number<value>     (.  sym = tab->Find(value);
-                            if(sym == nullptr)
-                              sym = tab->Add(value);
-                            entry = new SymOperand(sym); .)
-    | "(" Expr<op> ")"  (.  entry = MIEC::DACFactory::createDACOperand(std::move(op)); .)
+                            if(sym == nullptr) Err(L"Variable not defined");
+                            entry = MIEC::DACFactory::createEntry(MIEC::OpKind::eNop,
+                                            std::move(MIEC::DACFactory::createSymOperand(sym)),
+                                            nullptr,
+                                            L"Ident");
+                        .)
+
+    |                   (.  Symbol* sym; .)
+    
+    Number<sym>       (.  entry = MIEC::DACFactory::createEntry(MIEC::OpKind::eNop,
+                                            std::move(MIEC::DACFactory::createSymOperand(sym)),
+                                            nullptr,
+                                            L"ConstInt");
+                      .)
+
+    | "(" Expr<entry> ")"
   .
 
 /*--------------------END INSTRUCTION_LINE DECLARATION--------------------*/
@@ -290,13 +297,25 @@ PRODUCTIONS
   Ident<wchar_t* &name> = ident (.  name = coco_string_create(t->val); .)
   .
 
-  Number<int& value> = number   (.  int ret = swscanf(t->val, L"%d", &value);
-                                    if (ret < 1) Err(L"parsing number failed"); .)
+  Number<Symbol* numSym> = number  (. int value;
+                                      int ret = swscanf(t->val, L"%d", &value);
+                                      if (ret < 1) Err(L"parsing number failed");
+
+                                      std::wstring name = L"[ConstInt]";
+		                                  name.append(coco_string_create(t->val));
+
+                                      numSym = tab->Find(name);
+                                      if (!numSym) {
+                                        auto constIntSym = fac->CreateConstInt(getIntegerType(), name, value);
+                                        numSym = tab->Add(std::move(constIntSym));
+                                      }
+                                   .)
   .
 
-  Types<Type* type> =           (. type = new BasicType(BasicTypeKind::None); .)
-    ( "Integer"                 (. type = new BasicType(BasicTypeKind::Integer); .)
-    )
+  Types<Type* type> =           //(. type = new BasicType(BasicTypeKind::None); .)
+    "Integer"                 (. //type = new BasicType(BasicTypeKind::Integer);
+                                  type = getIntegerType();
+                              .)
   .
 
 /*--------------------END TYPE DECLARATION--------------------------------*/
