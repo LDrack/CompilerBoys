@@ -80,6 +80,7 @@ int main(int argc, char* argv[])
 		if (parser->errors->count == 0) {
 			//parser->gen->Decode();
 			//parser->gen->Interpret("MIEC.IN");
+			parser->dac.Print(wcout);
 			cout << "No errors" << endl;
 		}
 

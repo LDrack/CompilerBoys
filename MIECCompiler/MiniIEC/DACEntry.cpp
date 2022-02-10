@@ -9,7 +9,7 @@ namespace MIEC {
     void DACEntry::Print(std::wostream& wost, size_t indent) const
     {
         wost << std::wstring(indent, ' ') << "Entry: \"" << mLabel << "\" of type \""
-            << OpKindToString(mOp) << "\"" << std::endl;
+            << MIEC::opstrings[static_cast<size_t>(mOp)] << "\"" << std::endl;
         if (mFirst)
             mFirst->Print(wost, indent + 3);
         if (mSecond)

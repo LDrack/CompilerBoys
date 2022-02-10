@@ -1,7 +1,6 @@
 #include "SymbolTable.h"
 #include "SymbolFactory.h"
 #include "Kind.h"
-#include "OpKind.h"
 #include "DACFactory.h"
 #include "Type.h"
 #include <charconv>
@@ -78,7 +77,7 @@ PRODUCTIONS
 
 /*--------------------BEGIN VAR_DECL DECLARATION----------------------------*/
   VarDecl =                 (. wchar_t* name = nullptr;
-                               Type* type = nullptr; .)
+                               const Type* type = nullptr; .)
     Ident<name> ":"
     Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){Err(L"Insert new var failed");} .)
     {
@@ -313,7 +312,7 @@ PRODUCTIONS
                                    .)
   .
 
-  Types<const Type* type> =      
+  Types<const Type *&type> =      
     "Integer"                 (. type = getIntegerType(); .)
   .
 

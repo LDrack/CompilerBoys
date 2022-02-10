@@ -1,7 +1,6 @@
 #ifndef _DAC_OPERAND__
 #define _DAC_OPERAND__
 
-#include "Object.h"
 #include "Operand.h"
 //#include "DACEntry.h"
 #include "DACGenerator.h"

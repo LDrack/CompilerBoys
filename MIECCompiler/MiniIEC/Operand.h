@@ -15,7 +15,7 @@ namespace MIEC {
 		virtual void Print(std::wostream& wost, size_t indent) const = 0;
 
 	protected:
-		Operand();
+		Operand() = default;
 		OpClass mClass;
 	};
 }
