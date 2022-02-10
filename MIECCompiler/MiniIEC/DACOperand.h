@@ -3,7 +3,8 @@
 
 #include "Object.h"
 #include "Operand.h"
-#include "DACEntry.h"
+//#include "DACEntry.h"
+#include "DACGenerator.h"
 
 namespace MIEC {
 	class DACOperand : public Operand {

@@ -4,9 +4,9 @@
 namespace MIEC {
 	class Object {
 	public:
-		virtual ~Object();
+		virtual ~Object() = default;
 	protected:
-		Object();
+		Object() = default;
 	};
 }
 
