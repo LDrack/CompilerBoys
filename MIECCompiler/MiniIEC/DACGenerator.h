@@ -4,12 +4,11 @@
 #include <ostream>
 #include <vector>
 #include "Object.h"
-//#include "DACEntry.h"
-#include "Operand.h"
+#include "DACEntry.h"
 
 
 namespace MIEC {
-	class DACEntry;
+
 	class DACGenerator : Object {
 	public:
 		//bool AddStat(OpKind op, Operand* first);

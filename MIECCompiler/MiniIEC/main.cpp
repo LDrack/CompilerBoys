@@ -66,10 +66,11 @@ int main(int argc, char* argv[])
 		cout << "Usage: MIECCompiler.exe -in <infile.miec> -out <file.iex>" << endl;
 	}
 	else {
-		wchar_t* fileName = MIEC::coco_string_create(argv[2]);
+		wchar_t* fileName = coco_string_create(argv[2]);
+		//wchar_t* fileName = MIEC::coco_string_create(argv[2]);
 		MIEC::Scanner* scanner = new MIEC::Scanner(fileName);
 		MIEC::Parser* parser = new MIEC::Parser(scanner);
-		parser->tab = &MIEC::SymbolTable::GetInstance();
+		//parser->tab = &MIEC::SymbolTable::GetInstance();
 
 
 		//parser->gen = new MIEC::CodeGenerator();
@@ -84,7 +85,8 @@ int main(int argc, char* argv[])
 
 		writeReport(argv[2], parser->errors->count);
 
-		MIEC::coco_string_delete(fileName);
+		//MIEC::coco_string_delete(fileName);
+		coco_string_delete(fileName);
 		//delete parser->gen;
 		//delete parser->tab;
 		delete parser;

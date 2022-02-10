@@ -1,11 +1,12 @@
-#ifndef _DAC_ENRTY_H__
-#define _DAC_ENTRY_H__
+#ifndef _DAC_ENRTY_H__H_
+#define _DAC_ENTRY_H__H_
 
+
+#include <memory>
 #include <string>
 #include "Object.h"
 #include "OpKind.h"
 #include "Operand.h"
-#include <memory>
 
 namespace MIEC {
 
@@ -16,19 +17,12 @@ namespace MIEC {
 					std::unique_ptr <Operand> second,
 					std::wstring label = 0);
 
-			//Operand* getFirst();
-			//Operand* getSecond();
-			//OpKind getOp();
-			//int getNr();
-			//std::wstring* getLabel();
-
 			void Print(std::wostream& wost, size_t indent = 0) const;
 
 		private:
 			std::unique_ptr<Operand> mFirst, mSecond;
 			OpKind mOp;
 			std::wstring mLabel;
-			int mNr;
 	};
 }
 

@@ -13,8 +13,8 @@
 COMPILER MIEC
 
 /*--------------------BEGIN VARIABLE DECLARATION----------------------------*/
-    SymbolTable   *tab;
-    SymbolFactory *fac;
+    SymbolTable   *tab = &MIEC::SymbolTable::GetInstance();
+    SymbolFactory *fac = &MIEC::SymbolFactory::GetInstance();
     DACGenerator dac;
     // CodeGenerator *gen;
 /*--------------------END VARIABLE DECLARATION------------------------------*/
@@ -78,7 +78,8 @@ PRODUCTIONS
           "END" .
 
 /*--------------------BEGIN VAR_DECL DECLARATION----------------------------*/
-  VarDecl =                 (. wchar_t* name; Type* type; .)
+  VarDecl =                 (. wchar_t* name = nullptr;
+                               Type* type = nullptr; .)
     Ident<name> ":"
     Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){Err(L"Insert new var failed");} .)
     {
@@ -140,7 +141,7 @@ PRODUCTIONS
                                 (.  std::unique_ptr<MIEC::DACEntry> cond; .)
     "IF" Condition<cond> "THEN"
                                 (.  auto endLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
-                                    nullptr, nullptr, L"If: END")
+                                    nullptr, nullptr, L"If: END");
 
                                     auto elseLabel = MIEC::DACFactory::createEntry(OpKind::eNop,
                                     nullptr, nullptr, L"If: else");
@@ -169,17 +170,17 @@ PRODUCTIONS
 
 
   Condition<. std::unique_ptr<MIEC::DACEntry> &entry .> =
-                  (.  OpKind opKind;
-                      std::unique_ptr<MIEC::DACEntry> op, op2; .)
-  Expr<op>
-    { Relop<opKind>
-      Expr<op2>
-                  (.  op = MIEC::DACFactory::createEntry(opKind,
-                      MIEC::DACFactory::createDACOperand(std::move(op)),
-                      MIEC::DACFactory::createDACOperand(std::move(op2)));
+                  (.  OpKind opkind = OpKind::eNop;
+                      std::unique_ptr<MIEC::DACEntry> arg1, arg2; .)
+  Expr<arg1>
+    { Relop<opkind>
+      Expr<arg2>
+                  (.  arg1 = MIEC::DACFactory::createEntry(opkind,
+                      MIEC::DACFactory::createDACOperand(std::move(arg1)),
+                      MIEC::DACFactory::createDACOperand(std::move(arg2)));
                   .)
     }
-                  (. entry = std::move(op); .)
+                  (. entry = std::move(arg1); .)
   .
 
 /*--------------------END CONTROL_BLOCK DECLARATION-----------------------*/
@@ -194,19 +195,20 @@ PRODUCTIONS
   Print<. std::unique_ptr<MIEC::DACEntry> &entry .> =
                                 (. std::unique_ptr<MIEC::DACEntry> expr; .)
     "print" "(" Expr<expr> ")"
-                                (. entry = MIEC::DACFactory::createEntry(OpKind.ePrint,
-                                   MIEC::DACFactory::createDACOperand(std::move(expr))); .)
+                                (. entry = MIEC::DACFactory::createEntry(OpKind::ePrint,
+                                   MIEC::DACFactory::createDACOperand(std::move(expr)),
+                                   nullptr); .)
   .
 
   Assignment<. std::unique_ptr<MIEC::DACEntry> &entry .> =
-                        (.  wchar_t* name;
+                        (.  wchar_t* name = nullptr;
                             Type* type = nullptr;
                             Symbol* sym = nullptr;
                             std::unique_ptr<MIEC::DACEntry> expr; .)
-    Ident<name>         (.  sym = tab->Find(name).get();
+    Ident<name>         (.  sym = tab->Find(name);
                             if (sym == nullptr) Err(L"Variable not defined");  .)
 
-    ":=" Expr<expr>     (.  entry = MIEC::DACFactory::createEntry(OpKind.eAssign,
+    ":=" Expr<expr>     (.  entry = MIEC::DACFactory::createEntry(OpKind::eAssign,
                             MIEC::DACFactory::createSymOperand(sym),
                             MIEC::DACFactory::createDACOperand(std::move(expr)));
                         .)
@@ -215,12 +217,12 @@ PRODUCTIONS
 
 
   Expr<. std::unique_ptr<MIEC::DACEntry>& entry .> =
-                        (.  OpKind opKind;
-                            std::unique_ptr<MIEC::DACEntry> arg1, arg2 .)
+                        (.  OpKind opkind = OpKind::eNop;
+                            std::unique_ptr<MIEC::DACEntry> arg1, arg2; .)
     Term<arg1>
-    {  AddOp<opKind>
+    {  AddOp<opkind>
        Term<arg2>
-                        (.  arg1 = MIEC::DACFactory::createEntry(opKind,
+                        (.  arg1 = MIEC::DACFactory::createEntry(opkind,
                             MIEC::DACFactory::createDACOperand(std::move(arg1)),
                             MIEC::DACFactory::createDACOperand(std::move(arg2)));
                         .)
@@ -230,14 +232,14 @@ PRODUCTIONS
 
 
   Term<. std::unique_ptr<MIEC::DACEntry> &entry .> = 
-                      (.  OpKind opKind;
+                      (.  OpKind opkind = OpKind::eNop;
                           std::unique_ptr<MIEC::DACEntry> arg1, arg2; .)
   Fact<arg1> 
-  { MulOp<opKind>
+  { MulOp<opkind>
     Fact<arg2>
-                      (.  arg1 = MIEC::DACFactory::createEntry(opKind,
-                          std::move(arg1),
-                          std::move(arg2));
+                      (.  arg1 = MIEC::DACFactory::createEntry(opkind,
+                          MIEC::DACFactory::createDACOperand(std::move(arg1)),
+                          MIEC::DACFactory::createDACOperand(std::move(arg2)));
                       .)
   }
                       (. entry = std::move(arg1); .)
@@ -247,8 +249,8 @@ PRODUCTIONS
 
 
   Fact<. std::unique_ptr<MIEC::DACEntry> &entry .> =
-                        (.  wchar_t* name;
-                            Symbol* sym; .)
+                        (.  wchar_t* name = nullptr;
+                            Symbol* sym = nullptr; .)
 
     Ident<name>         (.  sym = tab->Find(name);
                             if(sym == nullptr) Err(L"Variable not defined");
@@ -258,7 +260,7 @@ PRODUCTIONS
                                             L"Ident");
                         .)
 
-    |                   (.  Symbol* sym; .)
+    |                   (.  Symbol* sym = nullptr; .)
     
     Number<sym>       (.  entry = MIEC::DACFactory::createEntry(MIEC::OpKind::eNop,
                                             std::move(MIEC::DACFactory::createSymOperand(sym)),
@@ -297,7 +299,7 @@ PRODUCTIONS
   Ident<wchar_t* &name> = ident (.  name = coco_string_create(t->val); .)
   .
 
-  Number<Symbol* numSym> = number  (. int value;
+  Number<Symbol* numSym> = number  (. int value = 0;
                                       int ret = swscanf(t->val, L"%d", &value);
                                       if (ret < 1) Err(L"parsing number failed");
 
@@ -312,10 +314,8 @@ PRODUCTIONS
                                    .)
   .
 
-  Types<Type* type> =           //(. type = new BasicType(BasicTypeKind::None); .)
-    "Integer"                 (. //type = new BasicType(BasicTypeKind::Integer);
-                                  type = getIntegerType();
-                              .)
+  Types<const Type* type> =      
+    "Integer"                 (. type = getIntegerType(); .)
   .
 
 /*--------------------END TYPE DECLARATION--------------------------------*/
