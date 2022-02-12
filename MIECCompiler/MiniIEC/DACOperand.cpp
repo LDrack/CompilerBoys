@@ -1,16 +1,12 @@
 #include "DACOperand.h"
 
 namespace MIEC {
-    DACOperand::DACOperand(DACEntry* entry) : mEntry(entry)
+    DACOperand::DACOperand(std::unique_ptr<DACEntry> entry) : mEntry(std::move(entry))
     {
         mClass = OpClass::eDACOp;
     }
 
-    DACEntry* DACOperand::getDACEntry()
-    {
-        return nullptr;
-    }
-    void DACOperand::Print(std::wostream& wost, size_t indent) const
+        void DACOperand::Print(std::wostream& wost, size_t indent) const
     {
         wost << std::wstring(indent, ' ') << "DACOperand:" << std::endl;
         if (mEntry) {

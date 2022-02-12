@@ -6,7 +6,7 @@
 #include "Symbol.h"
 
 namespace MIEC {
-	class SymOperand : Operand {
+	class SymOperand : public Operand {
 	public:
 		SymOperand(Symbol* sym);
 		Symbol* getSymbol();

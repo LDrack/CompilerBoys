@@ -5,10 +5,10 @@
 #include <vector>
 #include "Object.h"
 #include "DACEntry.h"
-#include "OpClass.h"
-#include "Operand.h"
+
 
 namespace MIEC {
+
 	class DACGenerator : Object {
 	public:
 		//bool AddStat(OpKind op, Operand* first);
@@ -18,7 +18,7 @@ namespace MIEC {
 
 		void Print(std::wostream &wost);
 	private:
-		std::vector<DACEntry> mEntries;
+		std::vector<std::unique_ptr<DACEntry>> mEntries;
 	};
 
 }

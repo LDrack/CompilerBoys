@@ -1,34 +1,28 @@
-#ifndef _DAC_ENRTY__
-#define _DAC_ENTRY__
+#ifndef _DAC_ENRTY_H__H_
+#define _DAC_ENTRY_H__H_
 
+
+#include <memory>
 #include <string>
 #include "Object.h"
 #include "OpKind.h"
 #include "Operand.h"
-#include <memory>
 
 namespace MIEC {
-	class DACEntry : Object {
-	public:
-		DACEntry(OpKind op,
-			std::unique_ptr<Operand> first,
-			std::unique_ptr <Operand> second,
-			int nr,
-			std::wstring label = 0);
 
-		//Operand* getFirst();
-		//Operand* getSecond();
-		//OpKind getOp();
-		//int getNr();
-		//std::wstring* getLabel();
+	class DACEntry : public Object {
+		public:
+			DACEntry(OpKind op,
+					std::unique_ptr<Operand> first,
+					std::unique_ptr <Operand> second,
+					std::wstring label = 0);
 
-		void Print(std::wostream& wost, size_t indent = 0) const;
+			void Print(std::wostream& wost, size_t indent = 0) const;
 
-	private:
-		std::unique_ptr<Operand> mFirst, mSecond;
-		OpKind mOp;
-		std::wstring mLabel;
-		int mNr;
+		private:
+			std::unique_ptr<Operand> mFirst, mSecond;
+			OpKind mOp;
+			std::wstring mLabel;
 	};
 }
 

@@ -1,7 +1,7 @@
 #ifndef _OPKIND__
 #define _OPKIND__
 
-#include "Object.h"
+#include <string>
 
 namespace MIEC {
 	enum class OpKind {
@@ -16,9 +16,9 @@ namespace MIEC {
 										     L"IfJump",     L"IfFalseJump", L"Print",     L"Exit"
 	};
 
-	const std::wstring OpKindToString(OpKind op) {
-		return opstrings[static_cast<size_t>(op)];
-	}
 }
+//const std::wstring OpKindToString(MIEC::OpKind op) {
+//	return MIEC::opstrings[static_cast<size_t>(op)];
+//}
 
 #endif

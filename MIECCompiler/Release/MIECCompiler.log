@@ -1,0 +1,60 @@
+﻿  Parser.cpp
+  The contents of <charconv> are available only with C++17 or later.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Parser.cpp(364,13): warning C4996: 'swscanf': This function or variable may be unsafe. Consider using swscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Scanner.cpp
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Scanner.cpp(14,2): warning C4996: 'wcsncpy': This function or variable may be unsafe. Consider using wcsncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Scanner.cpp(25,2): warning C4996: 'wcsncpy': This function or variable may be unsafe. Consider using wcsncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Scanner.cpp(82,15): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Scanner.cpp(83,15): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Scanner.cpp(93,2): warning C4996: 'wcsncpy': This function or variable may be unsafe. Consider using wcsncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Scanner.cpp(386,16): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\Scanner.cpp(583,2): warning C4996: 'wcsncpy': This function or variable may be unsafe. Consider using wcsncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  SymbolTable.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(2468,23): warning C4244: "Argument": Konvertierung von "const wchar_t" in "const _Elem", möglicher Datenverlust
+          with
+          [
+              _Elem=char
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(2479): message : Siehe Verweis auf die gerade kompilierte Instanziierung "void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)" der Funktions-Vorlage.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(2479): message : Siehe Verweis auf die gerade kompilierte Instanziierung "void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)" der Funktions-Vorlage.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(2459): message : Siehe Verweis auf die gerade kompilierte Instanziierung "void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)" der Funktions-Vorlage.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(2459): message : Siehe Verweis auf die gerade kompilierte Instanziierung "void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)" der Funktions-Vorlage.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\SymbolTable.cpp(55): message : Siehe Verweis auf die gerade kompilierte Instanziierung "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)" der Funktions-Vorlage.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\SymbolTable.cpp(55): message : Siehe Verweis auf die gerade kompilierte Instanziierung "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)" der Funktions-Vorlage.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+  main.cpp
+  The contents of <charconv> are available only with C++17 or later.
+C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\main.cpp(44,24): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Code wird generiert.
+  32 of 815 functions ( 3.9%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    43 functions had inline decision re-evaluated but remain unchanged
+  Codegenerierung ist abgeschlossen.
+  MIECCompiler.vcxproj -> C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\Release\MIECCompiler.exe
