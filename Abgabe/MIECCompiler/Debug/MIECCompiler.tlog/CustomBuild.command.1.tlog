@@ -1,0 +1,2 @@
+^C:\USERS\LUCAS\DESKTOP\FH\3_SEMESTER\COM\COMPILERBOYS\MIECCOMPILER\MINIIEC\MIEC.ATG
+.\Coco\Coco.exe C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\MIEC.atg -o C:\Users\Lucas\Desktop\FH\3_Semester\COM\CompilerBoys\MIECCompiler\MiniIEC\ -namespace MIEC -frames .\Coco

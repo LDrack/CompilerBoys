@@ -1,0 +1,16 @@
+PROGRAM if
+	BEGIN_VAR
+	a: Integer;
+	b: Integer;
+	END_VAR
+BEGIN
+
+	a := 2;
+	b := 5;
+
+	a := a + b;
+
+	print(a);
+END
+
+(*Print: 0x18, 0x18, 0x18 *)

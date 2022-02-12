@@ -1,0 +1,12 @@
+02/12/22 16:17:01 => ..\..\Testbench_fuer_Studierende\testfiles\ok\fibonacci.miec: OK
+02/12/22 16:17:01 => ..\..\Testbench_fuer_Studierende\testfiles\ok\if.miec: OK
+02/12/22 16:17:01 => ..\..\Testbench_fuer_Studierende\testfiles\ok\simple.miec: OK
+02/12/22 16:17:01 => ..\..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\arit.miec: OK
+02/12/22 16:17:01 => ..\..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\ArithLong.miec: OK
+02/12/22 16:17:02 => ..\..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\DuplicateConst.miec: OK
+02/12/22 16:17:02 => ..\..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\Multiplication.miec: OK
+02/12/22 16:17:02 => ..\..\Testbench_fuer_Studierende\testfiles\ok\arithmetic_operations\TestDivide.miec: OK
+02/12/22 16:17:02 => ..\..\Testbench_fuer_Studierende\testfiles\failed\xfail_empty.miec: FAILED: 2 error(s) detected
+02/12/22 16:17:02 => ..\..\Testbench_fuer_Studierende\testfiles\failed\xfail_progWrong.miec: FAILED: 2 error(s) detected
+02/12/22 16:17:02 => ..\..\Testbench_fuer_Studierende\testfiles\failed\xfail_TestDivByZero.miec: FAILED: 1 error(s) detected
+02/12/22 16:17:02 => ..\..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: FAILED: 1 error(s) detected
