@@ -36,6 +36,10 @@ COMPILER MIEC
       if (!sym || sym->GetKind() != SymbolKind::Type) {
         std::unique_ptr<MIEC::TypeSymbol> typeSym = fac->CreateTypeSym(BasicTypeKind::Integer, typeName);
         sym = tab->Add(std::move(typeSym));
+        if (!sym) {
+          Err(L"Insert Type Integer failed");
+          return nullptr;
+        }
       }
       return (sym->GetType());
     }
@@ -315,6 +319,9 @@ PRODUCTIONS
                                       if (!numSym) {
                                         auto constIntSym = fac->CreateConstInt(getIntegerType(), name, value);
                                         numSym = tab->Add(std::move(constIntSym));
+                                        if (!numSym) {
+                                          Err(L"Insert new ConstInt failed");
+                                        }
                                       }
                                    .)
   .

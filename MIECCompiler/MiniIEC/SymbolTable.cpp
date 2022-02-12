@@ -53,7 +53,8 @@ Symbol* SymbolTable::Add(std::unique_ptr<Symbol> sym)
 
 	if (mTable.find(name) != mTable.end()) {
 		std::string strName(name.begin(), name.end());
-		throw std::invalid_argument("A symbol with this name \"" + strName + "\" is already in the symbol table!");
+		return nullptr;
+		//throw std::invalid_argument("A symbol with this name \"" + strName + "\" is already in the symbol table!");
 	}
 	mTable[name] = std::move(sym);
 	return mTable[name].get();

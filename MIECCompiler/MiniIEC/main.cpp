@@ -9,7 +9,12 @@
 
 using namespace std;
 
-// set mInstanc
+
+#define PRINT_DAC_STDOUT 0
+
+
+// Singletons:
+// set mInstance
 std::unique_ptr<MIEC::SymbolTable> MIEC::SymbolTable::mInstance{nullptr};
 MIEC::SymbolFactory* MIEC::SymbolTable::mFac{nullptr};
 std::unique_ptr<MIEC::SymbolFactory> MIEC::SymbolFactory::mInstance{nullptr};
@@ -51,6 +56,17 @@ void writeReport(const char* filename, const int errorcount) {
 	o.close();
 }
 
+void printCoutMessage(char* filename, const int errorcount) {
+	cout << filename << ": ";
+
+	if (errorcount == 0) {
+		cout << "OK" << endl;
+	}
+	else {
+		cout << "FAILED: " << errorcount << " error(s) detected" << endl;
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	if (argc != 5) {
@@ -70,26 +86,30 @@ int main(int argc, char* argv[])
 		//wchar_t* fileName = MIEC::coco_string_create(argv[2]);
 		MIEC::Scanner* scanner = new MIEC::Scanner(fileName);
 		MIEC::Parser* parser = new MIEC::Parser(scanner);
-		//parser->tab = &MIEC::SymbolTable::GetInstance();
 
+		try {
+			parser->Parse();
+			printCoutMessage(argv[2], parser->errors->count);
 
-		//parser->gen = new MIEC::CodeGenerator();
-
-		parser->Parse();
-		parser->tab->Print(std::wcout);
-		if (parser->errors->count == 0) {
-			//parser->gen->Decode();
-			//parser->gen->Interpret("MIEC.IN");
-			parser->dac.Print(wcout);
-			cout << "No errors" << endl;
+			if (PRINT_DAC_STDOUT)
+				parser->tab->Print(std::wcout);
+			if (parser->errors->count == 0) {
+				if (PRINT_DAC_STDOUT)
+					parser->dac.Print(wcout);
+				cout << "No errors" << endl;
+			}
+		} catch (const std::exception& e) {
+			if (PRINT_DAC_STDOUT)
+				std::cerr << e.what() << std::endl;
+			delete parser;
+			delete scanner;
+			return -1;
 		}
 
 		writeReport(argv[2], parser->errors->count);
 
 		//MIEC::coco_string_delete(fileName);
 		coco_string_delete(fileName);
-		//delete parser->gen;
-		//delete parser->tab;
 		delete parser;
 		delete scanner;
 	}
