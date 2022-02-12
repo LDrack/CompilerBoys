@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "DACOperand.h"
 #include "SymOperand.h"
+#include "RefOperand.h"
 
 namespace MIEC {
 
@@ -22,11 +23,14 @@ namespace MIEC {
         }
 
         static std::unique_ptr<DACOperand> createDACOperand(std::unique_ptr<DACEntry>&& entry) {
-            return std::make_unique<DACOperand>(entry.get());
+            return std::make_unique<DACOperand>(std::move(entry));
             //return std::make_unique<Operand>(entry.get());
         }
 
-
+        static std::unique_ptr<RefOperand> createRefOperand(const DACEntry *entry) {
+            return std::make_unique<RefOperand>(entry);
+            //return std::make_unique<Operand>(entry.get());
+        }
 
 
 	};

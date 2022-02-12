@@ -85,6 +85,7 @@
     <ClCompile Include="MiniIEC\main.cpp" />
     <ClCompile Include="MiniIEC\Operand.cpp" />
     <ClCompile Include="MiniIEC\Parser.cpp" />
+    <ClCompile Include="MiniIEC\RefOperand.cpp" />
     <ClCompile Include="MiniIEC\Scanner.cpp" />
     <ClCompile Include="MiniIEC\StructType.cpp" />
     <ClCompile Include="MiniIEC\Symbol.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="MiniIEC\Object.h" />
     <ClInclude Include="MiniIEC\Operand.h" />
     <ClInclude Include="MiniIEC\Parser.h" />
+    <ClInclude Include="MiniIEC\RefOperand.h" />
     <ClInclude Include="MiniIEC\Scanner.h" />
     <ClInclude Include="MiniIEC\StructType.h" />
     <ClInclude Include="MiniIEC\Symbol.h" />

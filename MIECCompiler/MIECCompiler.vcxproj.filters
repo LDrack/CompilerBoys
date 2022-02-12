@@ -63,6 +63,9 @@
     <ClCompile Include="MiniIEC\Scanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MiniIEC\RefOperand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniIEC\Type.h">
@@ -126,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiniIEC\Scanner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniIEC\RefOperand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

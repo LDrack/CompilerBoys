@@ -1,12 +1,12 @@
-#include "DACOperand.h"
+#include "RefOperand.h"
 
 namespace MIEC {
-    DACOperand::DACOperand(std::unique_ptr<DACEntry> entry) : mEntry(std::move(entry))
+    RefOperand::RefOperand(const DACEntry* entry) : mEntry(entry)
     {
-        mClass = OpClass::eDACOp;
+        mClass = OpClass::eRefOp;
     }
 
-        void DACOperand::Print(std::wostream& wost, size_t indent) const
+    void RefOperand::Print(std::wostream& wost, size_t indent) const
     {
         wost << std::wstring(indent, ' ') << "DACOperand:" << std::endl;
         if (mEntry) {

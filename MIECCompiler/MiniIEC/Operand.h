@@ -6,7 +6,7 @@
 
 namespace MIEC {
 
-	enum class OpClass { eSymOp, eDACOp };
+	enum class OpClass { eSymOp, eDACOp, eRefOp };
 
 	class Operand : public Object {
 	public:

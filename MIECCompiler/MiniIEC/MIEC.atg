@@ -67,23 +67,30 @@ IGNORE cr + lf + tab
 
 /*--------------------BEGIN PRODUCTIONS DECLARATION-------------------------*/
 PRODUCTIONS
+  VarBlock =
+    "BEGIN_VAR"
+    {VarDecl}
+    "END_VAR"
+  .
+
+
   MIEC =  "PROGRAM" ident
-          "BEGIN_VAR"
-          [VarDecl]
-          "END_VAR"
+            [VarBlock]
           "BEGIN"
-          Statements
+            Statements
           "END" .
 
 /*--------------------BEGIN VAR_DECL DECLARATION----------------------------*/
   VarDecl =                 (. wchar_t* name = nullptr;
                                const Type* type = nullptr; .)
     Ident<name> ":"
-    Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){Err(L"Insert new var failed");} .)
-    {
-      Ident<name> ":"
-      Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){Err(L"Insert new var failed");} .)
-    }
+    Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){
+                                  Err(L"Insert new var failed");
+                                  } .)
+    // {
+    //   Ident<name> ":"
+    //   Types<type> ";"          (. if(!tab->Add(fac->CreateVar(type, name))){Err(L"Insert new var failed");} .)
+    // }
   .
 /*--------------------END VAR_DECL DECLARATION------------------------------*/
 
@@ -117,11 +124,11 @@ PRODUCTIONS
 
                                       auto startLoopLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
                                         MIEC::DACFactory::createDACOperand(std::move(cond)),
-                                        MIEC::DACFactory::createDACOperand(std::move(endLabel)),
+                                        MIEC::DACFactory::createRefOperand(endLabel.get()),
                                         L"While: Jump to END");
 
                                       auto endLoopLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
-                                        MIEC::DACFactory::createDACOperand(std::move(startLoopLabel)),
+                                        MIEC::DACFactory::createRefOperand(startLoopLabel.get()),
                                         nullptr,
                                         L"While: Jump to start");
                                       dac.AddStat(std::move(startLoopLabel));
@@ -145,13 +152,13 @@ PRODUCTIONS
                                     nullptr, nullptr, L"If: else");
 
                                     auto afterIfLabel = MIEC::DACFactory::createEntry(OpKind::eJump,
-                                    MIEC::DACFactory::createDACOperand(std::move(endLabel)),
+                                    MIEC::DACFactory::createRefOperand(endLabel.get()),
                                     nullptr,
                                     L"If: Jump over else to END");
 
                                     auto startIfLabel = MIEC::DACFactory::createEntry(OpKind::eIfFalseJump,
                                     MIEC::DACFactory::createDACOperand(std::move(cond)),
-                                    MIEC::DACFactory::createDACOperand(std::move(elseLabel)),
+                                    MIEC::DACFactory::createRefOperand(elseLabel.get()),
                                     L"If: Jump to else");
                                     dac.AddStat(std::move(startIfLabel));
                                 .)
@@ -275,19 +282,19 @@ PRODUCTIONS
 /*--------------------BEGIN OPERATION DECLARATION-------------------------*/
 
 
-  Relop < OpKind op > = "="     (.op = OpKind::eIsEqual; .)
+  Relop < OpKind &op > = "="     (.op = OpKind::eIsEqual; .)
                       | "<="    (.op = OpKind::eIsLessEqual; .)
                       | ">="    (.op = OpKind::eIsGreaterEqual; .)
                       | "!="    (.op = OpKind::eIsNotEqual; .)
                       | "<"     (.op = OpKind::eIsLess; .)
                       | ">"     (.op = OpKind::eIsGreater; .)
                       .
-  MulOp<OpKind op> =
+  MulOp<OpKind &op> =
     ( '*'                       (. op = OpKind::eMultiply; .)
     | '/'                       (. op = OpKind::eDivide; .)
     ).
 
-  AddOp<OpKind op> =
+  AddOp<OpKind &op> =
     ( '+'                       (. op = OpKind::eAdd; .)
     | '-'                       (. op = OpKind::eSubtract; .)
     ).
@@ -297,7 +304,7 @@ PRODUCTIONS
   Ident<wchar_t* &name> = ident (.  name = coco_string_create(t->val); .)
   .
 
-  Number<Symbol* numSym> = number  (. int value = 0;
+  Number<Symbol* &numSym> = number  (. int value = 0;
                                       int ret = swscanf(t->val, L"%d", &value);
                                       if (ret < 1) Err(L"parsing number failed");
 

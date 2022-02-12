@@ -1,18 +1,18 @@
-#ifndef _DAC_OPERAND__
-#define _DAC_OPERAND__
+#ifndef _REF_OPERAND__
+#define _REF_OPERAND__
 
 #include "Operand.h"
 //#include "DACEntry.h"
 #include "DACGenerator.h"
 
 namespace MIEC {
-	class DACOperand : public Operand {
+	class RefOperand : public Operand {
 	public:
-		DACOperand(std::unique_ptr<DACEntry> entry);
+		RefOperand(const DACEntry *entry);
 		void Print(std::wostream& wost, size_t indent) const override;
 
 	private:
-		std::unique_ptr<DACEntry> mEntry;
+		const DACEntry *mEntry;
 	};
 }
 
