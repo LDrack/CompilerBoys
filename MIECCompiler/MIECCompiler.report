@@ -1,6 +1,1 @@
-02/12/22 15:30:48 => ..\Testbench_fuer_Studierende\testfiles\ok\if.miec: OK
-02/12/22 15:31:54 => ..\Testbench_fuer_Studierende\testfiles\ok\if.miec: OK
-02/12/22 16:12:00 => ..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: FAILED: 1 error(s) detected
-02/12/22 16:12:13 => ..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: FAILED: 1 error(s) detected
-02/12/22 16:12:57 => ..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: FAILED: 1 error(s) detected
-02/12/22 16:14:56 => ..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: FAILED: 1 error(s) detected
+02/14/22 13:20:06 => ..\Testbench_fuer_Studierende\testfiles\failed\double_declaration\xfail_miecTestDoubleDecare.miec: FAILED: 1 error(s) detected

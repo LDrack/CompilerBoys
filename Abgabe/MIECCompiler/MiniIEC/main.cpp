@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 			if (parser->errors->count == 0) {
 				if (PRINT_DAC_STDOUT)
 					parser->dac.Print(wcout);
-				cout << "No errors" << endl;
+				//cout << "No errors" << endl;
 			}
 		} catch (const std::exception& e) {
 			if (PRINT_DAC_STDOUT)
